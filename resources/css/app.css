@@ -1,0 +1,68 @@
+@import "~slick-carousel/slick/slick.css";
+@import "~slick-carousel/slick/slick-theme.css";
+@import "../js/assets/css/tla-modal.css";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+    button,
+    .btn {
+        @apply !flex !items-center !justify-center text-sm;
+    }
+
+    .ant-btn-primary,
+    .btn-primary,
+    .tla-btn-primary {
+        @apply bg-primary-700 text-white;
+    }
+
+    .btn-success {
+        @apply bg-success-700 text-white;
+    }
+
+    .btn-success:hover {
+        @apply !border-success-700 !ring-success-700;
+    }
+
+    .btn-danger {
+        @apply bg-red-700 text-white;
+    }
+
+    .btn-danger:hover {
+        @apply !border-red-700 !ring-red-700;
+    }
+
+    .btn-danger:hover, .btn-success:hover, .btn-primary:hover {
+        @apply !text-white;
+    }
+
+    .nav-item {
+        @apply uppercase !text-[10px];
+    }
+}
+
+.ant-popconfirm-buttons {
+    @apply !flex !justify-end;
+}
+
+.ant-dropdown-menu-dark, .ant-dropdown-menu-dark .ant-dropdown-menu {
+    background: white !important;
+}
+
+.ant-picker-header-view {
+    display: flex !important;
+    justify-content: center !important;
+}
+
+.slick-next:before {
+    content: url("/images/arrow-right.svg") !important;
+}
+
+.slick-prev:before {
+    content: url("/images/arrow-left.svg") !important;
+}
+
+:where(.css-dev-only-do-not-override-mxhywb)[class^="ant-input"], :where(.css-dev-only-do-not-override-mxhywb)[class*=" ant-input"] {
+    @apply !w-full;
+}

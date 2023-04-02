@@ -1,0 +1,7 @@
+export const Types = {
+  GET_WOODS: 'GET_WOODS',
+  GET_WOOD: 'GET_WOOD',
+  ADD_WOOD: 'ADD_WOOD',
+  REMOVE_WOOD: 'REMOVE_WOOD',
+  UPDATE_WOOD: 'UPDATE_WOOD',
+}

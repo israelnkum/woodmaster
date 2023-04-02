@@ -1,0 +1,26 @@
+[
+    {
+        "roles": [
+            "admin"
+        ],
+        "group": "Wood",
+        "permissions": [
+            "add",
+            "edit",
+            "delete",
+            "view"
+        ]
+    },
+    {
+        "roles": [
+            "admin"
+        ],
+        "group": "Pallet",
+        "permissions": [
+            "add",
+            "edit",
+            "delete",
+            "view"
+        ]
+    }
+]
