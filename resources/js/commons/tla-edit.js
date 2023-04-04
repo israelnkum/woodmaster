@@ -11,7 +11,7 @@ function TlaEdit({link, data, text, icon, type, activeRoles}) {
         // activeRoles.includes('Admin') &&
         <Link to={ link } style={{ textDecoration: 'none' }} state={ {background: location, data: data} }>
             <Button title={'Edit'} icon={ icon && <FiEdit2/> }>
-                {text ?? <>&nbsp;{ text }</>}
+                {text ?? <>&nbsp; { text }</>}
             </Button>
         </Link>
     )

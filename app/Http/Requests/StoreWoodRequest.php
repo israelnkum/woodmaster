@@ -21,10 +21,11 @@ class StoreWoodRequest extends FormRequest
      *
      * @return array<string, mixed>
      */
-    public function rules()
+    public function rules(): array
     {
         return [
-            //
+            'pallet_log_id' => 'required',
+            'sub_log' => 'required'
         ];
     }
 }

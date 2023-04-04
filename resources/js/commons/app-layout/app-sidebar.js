@@ -1,7 +1,7 @@
 import {Affix, Layout} from 'antd'
 import PropTypes from "prop-types";
 import React from 'react'
-import {FiHome} from "react-icons/fi";
+import {FiHome, FiPlus} from "react-icons/fi";
 import {connect} from "react-redux";
 import {SidebarMenus} from "../../utils/side-bar-menu";
 import MenuHelper from "../menu-helper";
@@ -21,7 +21,8 @@ function AppSidebar(props) {
                 </div>
                 <MenuHelper icons={{
                     home: <FiHome/>,
-                    pallet: <BsStack/>
+                    pallet: <BsStack/>,
+                    add: <FiPlus/>
                 }} menus={SidebarMenus} direction={'inline'}/>
             </Layout.Sider>
         </Affix>

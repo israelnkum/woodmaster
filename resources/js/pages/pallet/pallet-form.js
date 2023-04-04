@@ -14,6 +14,7 @@ function PalletForm(props) {
     const formValues = {
         id: 0,
         pallet_number: null,
+        log:  localStorage.getItem('palletLogNumber'),
         ...state.data
     }
 
@@ -24,8 +25,19 @@ function PalletForm(props) {
             onSubmit={formValues.id === 0 ? addPallet : updatePallet}
             formTitle={`${(formValues.id === 0 ? "New" : "Edit")} Pallet`}>
             <Row gutter={10}>
-                <Col span={12}>
+                <Col span={24}>
                     <Form.Item name="pallet_number" label="pallet number">
+                        <Input size={'large'}/>
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item name="log" label="log"
+                               rules={[
+                                   {
+                                       required: true,
+                                       message: 'Required'
+                                   }
+                               ]}>
                         <Input size={'large'}/>
                     </Form.Item>
                 </Col>

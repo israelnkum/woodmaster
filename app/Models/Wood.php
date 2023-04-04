@@ -15,14 +15,18 @@ class Wood extends Model
      */
     protected $fillable = [
         'number',
-        'log',
+        'pallet_log_id',
         'sub_log',
         'parcel',
         'length',
         'width',
         'sheets',
         'square_meter',
-        'pallet_id',
         'user_id'
     ];
+
+    public function palletLog()
+    {
+        return $this->belongsTo(PalletLog::class);
+    }
 }

@@ -46,8 +46,7 @@ class PalletController extends Controller
     public function getPalletWood($pallet): AnonymousResourceCollection
     {
         $pal = Pallet::findOrFail($pallet);
-
-        return WoodResource::collection($pal->woods()->paginate(10));
+        return WoodResource::collection($pal->woods()->paginate(500));
     }
 
     /**
@@ -62,6 +61,12 @@ class PalletController extends Controller
         try {
             $request['user_id'] = Auth::user()->id;
             $pallet = Pallet::create($request->all());
+
+            $pallet->logs()->create([
+                'log_number' => $request->log,
+                'user_id' => Auth::id()
+            ]);
+
             DB::commit();
 
             return new PalletResource($pallet);
@@ -84,12 +89,24 @@ class PalletController extends Controller
     public function update(UpdatePalletRequest $request, $id): JsonResponse|PalletResource
     {
         DB::beginTransaction();
+
         try {
             $pallet = Pallet::findOrFail($id);
+
             $pallet->update($request->all());
+
+            // create a new log if pallet log does not exit
+            if (!$pallet->logs->pluck('log_number')->contains($request->log)) {
+                $pallet->logs()->create([
+                    'log_number' => $request->log,
+                    'user_id' => Auth::id()
+                ]);
+
+            }
+
             DB::commit();
 
-            return new PalletResource($pallet);
+            return new PalletResource(Pallet::find($id));
         } catch (Exception $exception) {
             Log::error('Update Pallet ', [$exception]);
 

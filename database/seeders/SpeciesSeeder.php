@@ -14,7 +14,14 @@ class SpeciesSeeder extends Seeder
      */
     public function run(): void
     {
-        $species = ['Koto'];
+        $species = [
+            'ASANFINA',
+            'MAHOGANY',
+            'KOTO',
+            'SAPELE',
+            'EDINAM',
+            'CANDOLIA'
+        ];
 
         foreach ($species as $spec) {
             Species::query()->updateOrCreate(

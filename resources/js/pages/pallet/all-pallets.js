@@ -45,8 +45,8 @@ function AllPallets (props) {
                         </Link>
                     ) }/>
                     <Column title="Action" render={ (value) => (
-                        <Space size={ 0 }>
-                            <TlaEdit icon data={ value } link={ 'form' } type={ 'text' }/>
+                        <Space>
+                            <TlaEdit icon data={{ ...value, log: value?.logs[value?.logs.length - 1].log_number} } link={ 'form' } type={ 'text' }/>
                             <TlaConfirm title={ 'Pallet' } callBack={ () => {
                                 deletePallet(value.id).then(() => TlaSuccess('Pallet Deleted'))
                             } }/>

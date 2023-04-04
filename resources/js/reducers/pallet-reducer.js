@@ -28,6 +28,7 @@ export default function palletReducer (state = initialState, action) {
         case Types.UPDATE_PALLET:
             return {
                 ...state,
+                pallet: action.payload,
                 pallets: {
                     ...state.pallets,
                     data: state.pallets.data.map((pallet) => {
