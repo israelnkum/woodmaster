@@ -10805,6 +10805,15 @@ button,
 .w-1{
   width: 0.25rem;
 }
+.w-\[20px\]{
+  width: 20px;
+}
+.w-\[50px\]{
+  width: 50px;
+}
+.min-w-\[50px\]{
+  min-width: 50px;
+}
 .max-w-6xl{
   max-width: 72rem;
 }
@@ -10841,6 +10850,10 @@ button,
 .gap-x-2{
   -moz-column-gap: 0.5rem;
        column-gap: 0.5rem;
+}
+.gap-x-3{
+  -moz-column-gap: 0.75rem;
+       column-gap: 0.75rem;
 }
 .overflow-hidden{
   overflow: hidden;
@@ -10896,6 +10909,10 @@ button,
 .bg-gray-20{
   --tw-bg-opacity: 1;
   background-color: rgb(239 239 239 / var(--tw-bg-opacity));
+}
+.bg-black{
+  --tw-bg-opacity: 1;
+  background-color: rgb(0 0 0 / var(--tw-bg-opacity));
 }
 .bg-cover{
   background-size: cover;
@@ -10960,6 +10977,15 @@ button,
 }
 .pb-10{
   padding-bottom: 2.5rem;
+}
+.pt-3{
+  padding-top: 0.75rem;
+}
+.pt-6{
+  padding-top: 1.5rem;
+}
+.pt-7{
+  padding-top: 1.75rem;
 }
 .text-left{
   text-align: left;

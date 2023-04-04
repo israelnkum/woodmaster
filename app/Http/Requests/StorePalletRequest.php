@@ -24,7 +24,7 @@ class StorePalletRequest extends FormRequest
     public function rules()
     {
         return [
-            //
+            'pallet_number' => 'required|unique:pallets'
         ];
     }
 }

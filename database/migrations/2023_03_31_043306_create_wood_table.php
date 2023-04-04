@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Pallet;
+use App\Models\PalletLog;
 use App\Models\User;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -17,15 +18,14 @@ return new class extends Migration
     {
         Schema::create('wood', static function (Blueprint $table) {
             $table->id();
+            $table->foreignIdFor(PalletLog::class)->constrained();
             $table->integer('number');
-            $table->string('log');
             $table->string('sub_log');
             $table->string('parcel')->nullable();
             $table->integer('length');
             $table->integer('width');
             $table->integer('sheets');
             $table->decimal('square_meter');
-            $table->foreignIdFor(Pallet::class)->constrained();
             $table->foreignIdFor(User::class)->constrained();
             $table->softDeletes();
             $table->timestamps();

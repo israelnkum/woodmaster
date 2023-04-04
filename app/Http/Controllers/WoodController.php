@@ -40,7 +40,7 @@ class WoodController extends Controller
         DB::beginTransaction();
 
         try {
-            $request['number'] = $this->getNumber($request->log, $request->sub_log);
+            $request['number'] = $this->getNumber($request->pallet_log_id, $request->sub_log);
             $request['user_id'] = Auth::user()->id;
             $request['square_meter'] = round(($request->length * $request->width * $request->sheets) / 10000, 2);
 
@@ -48,15 +48,15 @@ class WoodController extends Controller
 
             DB::commit();
 
-            Barcode::printBarcode([
-                'length' => $request->length,
-                'width' => $request->width,
-                'log' => $request->log,
-                'subLog' => $request->sub_log,
-                'number' => $request->number,
-                'sheets' => $request->sheets,
-                'squareMeter' => $request->square_meter
-            ]);
+//            Barcode::printBarcode([
+//                'length' => $request->length,
+//                'width' => $request->width,
+//                'log' => $request->log,
+//                'subLog' => $request->sub_log,
+//                'number' => $request->number,
+//                'sheets' => $request->sheets,
+//                'squareMeter' => $request->square_meter
+//            ]);
 
             return new WoodResource($wood);
         } catch (Exception $exception) {
@@ -69,11 +69,9 @@ class WoodController extends Controller
     }
 
 
-    public function getNumber(int $log, string $subLog): int
+    public function getNumber($pallet_log_id, $subLog): int
     {
-        $query = Wood::query()->where('log', $log)->where('sub_log', $subLog)->orderBy('created_at', 'desc')->first();
-
-        Log::info('query - ', [$query]);
+        $query = Wood::query()->where('pallet_log_id', $pallet_log_id)->where('sub_log', $subLog)->orderBy('created_at', 'desc')->first();
 
         if ($query) {
             $number = $query->number + 1;
@@ -98,6 +96,7 @@ class WoodController extends Controller
         try {
             $wood = Wood::findOrFail($id);
             $wood->update($request->all());
+
             DB::commit();
 
             return new WoodResource($wood);
@@ -137,7 +136,7 @@ class WoodController extends Controller
         }
     }
 
-    public function printBarcode($woodId)
+    public function printBarcode($woodId): JsonResponse
     {
         try {
             $wood = Wood::query()->findOrFail($woodId);

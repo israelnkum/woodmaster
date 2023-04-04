@@ -7,25 +7,20 @@ export const SidebarMenus = [
         icon: 'home'
     },
     {
-        title: 'Pallets',
-        link: '#',
-        children: [
-            {
-                permission: 'add-pallet',
-                modal: true,
-                title: 'Add Pallet',
-                link: '/app/pallets/form',
-            },
-            {
-                permission: 'view-pallet',
-                modal: false,
-                title: 'All Pallets',
-                link: '/app/pallets',
-            }
-        ],
-        permissions: ['add-pallet', 'view-pallet'],
-        icon: 'pallet'
+        title: 'Add Pallet',
+        link: '/app/pallets/form',
+        modal: true,
+        children: [],
+        permissions: ['add-pallet'],
+        icon: 'add'
     },
+    {
+        title: 'All Pallet',
+        link: '/app/pallets',
+        children: [],
+        permissions: ['view-pallet'],
+        icon: 'pallet'
+    }
     // {
     //     title: 'Wood',
     //     link: '#',

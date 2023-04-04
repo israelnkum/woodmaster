@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Pallet extends Model
@@ -40,10 +41,21 @@ class Pallet extends Model
     }
 
     /**
+     * @return HasManyThrough
+     */
+    public function woods(): HasManyThrough
+    {
+        return $this->hasManyThrough(Wood::class, PalletLog::class);
+    }
+
+
+    /**
      * @return HasMany
      */
-    public function woods(): HasMany
+    public function logs(): HasMany
     {
-        return $this->hasMany(Wood::class);
+        return $this->hasMany(PalletLog::class);
     }
+
+
 }

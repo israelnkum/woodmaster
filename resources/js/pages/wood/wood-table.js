@@ -3,11 +3,12 @@ import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
-import {handleDeleteWood, handleGetAllWoods, handlePrintBarcode} from "../../actions/wood/Action";
+import {handleDeleteWood, handlePrintBarcode} from "../../actions/wood/Action";
 import TlaEdit from "../../commons/tla-edit";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import {FiPrinter} from "react-icons/fi";
+import {handleGetPalletWood} from "../../actions/pallet/Action";
 
 const { Column } = Table
 
@@ -18,7 +19,6 @@ function WoodTable (props) {
         <div className={'pb-10'}>
             {/*<FilterWood/>*/}
             <TlaTableWrapper filterObj={filter} callbackFunction={getWood} data={wood?.data} meta={wood?.meta}>
-                <Column title="number" dataIndex={'number'}/>
                 <Column title="log" dataIndex={'log'}/>
                 <Column title="sub log" dataIndex={'sub_log'}/>
                 <Column title="length" dataIndex={'length'}/>
@@ -55,7 +55,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
     deleteWood: (id) => dispatch(handleDeleteWood(id)),
     printBarCode: (id) => dispatch(handlePrintBarcode(id)),
-    getWood: (payload) => dispatch(handleGetAllWoods(payload))
+    getWood: (id) => dispatch(handleGetPalletWood(id))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(WoodTable)

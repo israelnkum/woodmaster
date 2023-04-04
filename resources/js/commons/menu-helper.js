@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
-import { Menu } from 'antd'
+import React, {useState} from 'react'
+import {Menu} from 'antd'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { useLocation } from 'react-router'
+import {Link} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {useLocation} from 'react-router'
 
 const rootSubmenuKeys = []
 
@@ -32,23 +32,28 @@ function MenuHelper({activeRoles, permissions, menus, direction, icons, linkStyl
     const items = menus.map((nav) => {
         rootSubmenuKeys.push(nav.title)
         return (nav.permissions.length === 0 || permissions.some(role => nav.permissions.includes(role))) && getItem(
-            <Link className={ 'nav-item' } style={ linkStyles } to={ nav.link }>{ nav.title }</Link>,
+            <Link className={'nav-item'}
+                  style={linkStyles}
+                  state={{background: nav.modal && location}}
+                  to={nav.link}>{nav.title}
+            </Link>,
             icons[nav.icon] ?? '',
             nav.title,
             nav.children.length > 0 && nav.children.map((child) => (
                     (child.permission === '' ?
                             getItem(
-                                <Link className={ 'nav-item' }
-                                      style={ linkStyles }
-                                      state={ {background: child.modal && location} }
-                                      to={ child.link }>
-                                    { child.title }
+                                <Link className={'nav-item'}
+                                      style={linkStyles}
+                                      state={{background: child.modal && location}}
+                                      to={child.link}>
+                                    {child.title}
                                 </Link>, icons[child.icon] ?? '', child.title
                             ) : permissions.includes(child.permission) &&
                             getItem(
-                                <Link className={ 'nav-item' } style={ linkStyles }
-                                      state={ {background: child.modal && location} } to={ child.link }>
-                                    { child.title }
+                                <Link className={'nav-item'} style={linkStyles}
+                                      state={{background: child.modal && location}}
+                                      to={child.link}>
+                                    {child.title}
                                 </Link>, icons[child.icon] ?? '', child.title
                             )
                     )
@@ -59,11 +64,11 @@ function MenuHelper({activeRoles, permissions, menus, direction, icons, linkStyl
 
     return (
         <Menu
-            className={ 'sideBarNav' }
-            defaultSelectedKeys={ ['dashboard'] } openKeys={ openKeys } onOpenChange={ onOpenChange }
-            mode={ direction }
+            className={'sideBarNav'}
+            defaultSelectedKeys={['dashboard']} openKeys={openKeys} onOpenChange={onOpenChange}
+            mode={direction}
             theme="dark"
-            items={ items }
+            items={items}
         />
     )
 }

@@ -18,14 +18,14 @@ class WoodResource extends JsonResource
         return [
             'id' => $this->id,
             'number' => $this->number,
-            'log' => $this->log,
+            'log' => $this->palletLog->log_number,
             'sub_log' => $this->sub_log,
             'parcel' => $this->parcel,
             'length' => $this->length,
             'width' => $this->width,
             'sheets' => $this->sheets,
             'square_meter' => $this->square_meter,
-            'pallet_id' => $this->pallet_id,
+            'pallet_log_id' => $this->pallet_log_id,
         ];
     }
 }
