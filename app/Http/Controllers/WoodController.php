@@ -79,7 +79,6 @@ class WoodController extends Controller
             $number = 1;
         }
 
-        Log::info('number - ', [$number]);
         return $number;
     }
 

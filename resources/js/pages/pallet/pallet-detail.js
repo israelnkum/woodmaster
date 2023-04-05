@@ -67,7 +67,7 @@ function PalletDetail(props) {
                                 <Divider className={'!m-1'}/>
                                 <div className={'flex justify-center'}>
                                     <TlaEdit icon text={"Edit Pallet"}
-                                             data={{...pallet, log: palletLogs[palletLogs.length - 1].log_number}}
+                                             data={{...pallet, log: palletLogs[palletLogs?.length - 1]?.log_number}}
                                              link={'/app/pallets/form'} type={'text'}/>
                                 </div>
                             </Card>
