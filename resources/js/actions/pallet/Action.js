@@ -1,6 +1,7 @@
 import api from '../../utils/api'
-import {addPallet, getPallet, getPallets, removePallet, updatePallet,} from './ActionCreators'
+import {addPallet, getPallet, getPalletLogs, getPallets, removePallet, updatePallet,} from './ActionCreators'
 import {getWoods} from "../wood/ActionCreators";
+import {completeExport} from "../../utils";
 
 /**
  * Store a newly created resource in storage.
@@ -55,6 +56,17 @@ export const handleGetPalletWood = (id) => (dispatch) => {
     })
 }
 
+export const handleGetPalletLogs = (id) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/${id}/logs`).then((res) => {
+            dispatch(getPalletLogs(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
 /**
  * Update the specified resource in storage.
  * @param data
@@ -84,6 +96,19 @@ export const handleDeletePallet = (id) => (dispatch) => {
             dispatch(removePallet(id))
             resolve(res)
         }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+
+export const handlePrintPalletReport = (id, palletNumber) => async () => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/${id}/report`, { responseType: 'blob' })
+            .then((res) => {
+                completeExport(res.data, `pallet-${palletNumber}`)
+                resolve()
+            }).catch((err) => {
             reject(err)
         })
     })

@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Space, Table, Button} from 'antd'
+import {Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -9,49 +9,55 @@ import ViewAllWrapper from "../../commons/view-all-wrapper";
 import TlaEdit from "../../commons/tla-edit";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
-import {Link} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 
-const { Column } = Table
+const {Column} = Table
 
-function AllPallets (props) {
-    const { getPallets, deletePallet, pallets, filter } = props
-    const { data, meta }= pallets
+function AllPallets(props) {
+    const {getPallets, deletePallet, pallets, filter} = props
+    const {data, meta} = pallets
     const [loading, setLoading] = useState(true)
-    const { setPageInfo } = useOutletContext();
+    const {setPageInfo} = useOutletContext();
+    const navigate = useNavigate()
+
     useEffect(() => {
-        setPageInfo({ title: 'Pallets', addLink: '/app/pallets/form', buttonText: 'Pallet' })
+        setPageInfo({title: 'Pallets', addLink: '/app/pallets/form', buttonText: 'Pallet'})
 
         getPallets(new URLSearchParams(filter)).then(() => {
             setLoading(false)
         })
     }, [])
 
+    const Details = ({id}) => {
+        return {
+            onClick: () => {
+                navigate(`/app/pallets/${id}/details`)
+            },
+        };
+    }
+
     return (
         <div className={'pb-10'}>
             {/*<FilterPallets/>*/}
             <ViewAllWrapper loading={loading} noData={data.length === 0}>
-                <TlaTableWrapper filterObj={filter}  callbackFunction={getPallets} data={data} meta={meta}>
-                    <Column title="pallet #" dataIndex={'pallet_number'}/>
-                    <Column title="thickness" dataIndex={'thickness'}/>
-                    <Column title="quality" dataIndex={'quality'}/>
-                    <Column title="species" dataIndex={'species'}/>
-                    <Column title="date created" dataIndex={'date_created'}/>
-                    <Column title="wood count" dataIndex={'wood_count'}/>
-                    <Column title="details" render={ ({ id }) => (
-                        <Link to={`/app/pallets/${id}/details`}>
-                            <Button>
-                                Details
-                            </Button>
-                        </Link>
-                    ) }/>
-                    <Column title="Action" render={ (value) => (
+                <TlaTableWrapper filterObj={filter} callbackFunction={getPallets} data={data} meta={meta}>
+                    <Column className={'cursor-pointer'} onCell={Details} title="pallet #" dataIndex={'pallet_number'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="thickness" dataIndex={'thickness'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="quality" dataIndex={'quality'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="species" dataIndex={'species'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="date created" dataIndex={'date_created'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="logs" dataIndex={'logs_count'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="woods" dataIndex={'wood_count'}/>
+                    <Column className={'cursor-pointer'} title="Action" render={(value) => (
                         <Space>
-                            <TlaEdit icon data={{ ...value, log: value?.logs[value?.logs.length - 1].log_number} } link={ 'form' } type={ 'text' }/>
-                            <TlaConfirm title={ 'Pallet' } callBack={ () => {
+                            <TlaEdit icon
+                                     data={{...value, log: value?.pallet_logs[value.pallet_logs.length - 1].log_number}}
+                                     link={'form'} type={'text'}/>
+                            <TlaConfirm title={'Pallet'} callBack={() => {
                                 deletePallet(value.id).then(() => TlaSuccess('Pallet Deleted'))
-                            } }/>
+                            }}/>
                         </Space>
-                    ) }/>
+                    )}/>
                 </TlaTableWrapper>
             </ViewAllWrapper>
         </div>

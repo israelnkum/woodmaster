@@ -16,7 +16,8 @@
             color: #000;
             vertical-align: top;
         }
-        th{
+
+        th {
             border-bottom: solid 2px #262626;
             text-transform: capitalize;
             color: #1c1c1c;
@@ -25,12 +26,14 @@
             padding: 10px;
             margin: 0;
         }
+
         td {
             padding: 10px;
             font-size: 13px;
             font-weight: lighter;
             margin: 0;
         }
+
         table > tbody > tr:nth-of-type(odd) > * {
             background: rgba(26, 26, 26, 0.04);
             color: #000000;
@@ -39,12 +42,11 @@
 </head>
 <body>
 <div>
-{{--    <x-print-header :employee-dashboard-id="$data[0]->employee_id"/>--}}
+    {{--    <x-print-header :employee-dashboard-id="$data[0]->employee_id"/>--}}
 </div>
 <table border="0">
     <thead align="left">
     <tr align="left">
-        <th>#</th>
         @yield('headers')
     </tr>
     </thead>

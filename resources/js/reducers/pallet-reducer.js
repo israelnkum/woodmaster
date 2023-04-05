@@ -5,7 +5,8 @@ const initialState = {
         meta: {}
     },
     filter: {},
-    pallet: {}
+    pallet: {},
+    palletLogs: []
 }
 
 export default function palletReducer (state = initialState, action) {
@@ -15,6 +16,9 @@ export default function palletReducer (state = initialState, action) {
 
         case Types.GET_PALLET:
             return { ...state, pallet: action.payload }
+
+        case Types.GET_PALLET_LOGS:
+            return { ...state, palletLogs: action.payload }
 
         case Types.ADD_PALLET:
             return {

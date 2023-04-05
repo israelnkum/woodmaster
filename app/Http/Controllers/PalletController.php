@@ -7,16 +7,21 @@ use App\Http\Requests\UpdatePalletRequest;
 use App\Http\Resources\PalletResource;
 use App\Http\Resources\WoodResource;
 use App\Models\Pallet;
-use App\Models\Wood;
+use App\Models\PalletLog;
+use App\Traits\HasPrint;
 use Exception;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class PalletController extends Controller
 {
+    use HasPrint;
+
     /**
      * Display a listing of the resource.
      *
@@ -46,7 +51,30 @@ class PalletController extends Controller
     public function getPalletWood($pallet): AnonymousResourceCollection
     {
         $pal = Pallet::findOrFail($pallet);
-        return WoodResource::collection($pal->woods()->paginate(500));
+        return WoodResource::collection($pal->woods()->paginate(10));
+    }
+
+    /**
+     * @param $pallet
+     * @return Collection|array
+     */
+    public function getPalletLogs($pallet): Collection|array
+    {
+        return PalletLog::query()->where('pallet_id', $pallet)->get();
+    }
+
+    /**
+     * @param $palletId
+     * @return Response
+     */
+    public function getPalletReport($palletId): Response
+    {
+        $pallet = Pallet::query()->find($palletId);
+
+        $resource = WoodResource::collection($pallet->woods)->collection
+            ->groupBy(['palletLog.log_number', 'sub_log']);
+
+        return $this->pdf('print.pallet.report', $resource, 'Pallet-' . $pallet->pallet_number);
     }
 
     /**

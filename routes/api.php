@@ -1,6 +1,5 @@
 <?php
 
-use App\Helpers\Barcode;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PalletController;
 use App\Http\Controllers\UserController;
@@ -31,6 +30,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
 
     Route::resource('/users', UserController::class);
     Route::get('/pallet/{id}/wood', [PalletController::class, 'getPalletWood']);
+    Route::get('/pallet/{id}/logs', [PalletController::class, 'getPalletLogs']);
     Route::apiResource('/pallets', PalletController::class);
     Route::post('/wood/{id}/barcode', [WoodController::class, 'printBarcode']);
     Route::apiResource('/wood', WoodController::class);
@@ -39,18 +39,4 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::get('commons', [HomeController::class, 'getCommonData']);
-//Route::get('test-print', static function () {
-//
-//    Barcode::printBarcode([
-//        'content' => '200/10',
-//        'length' => 250,
-//        'width' => 18,
-//        'log' => 20,
-//        'subLog' => 9,
-//        'number' => 8,
-//        'sheets' => 32,
-//        'squareMeter' => 14.40
-//    ]);
-//});
+Route::get('/pallet/{id}/report', [PalletController::class, 'getPalletReport']);
