@@ -58,7 +58,7 @@ function WoodForm(props) {
 
     return (
         <Card title={'Add Record'} size={'small'} extra={[
-            <Button
+            <Button className={'hidden'}
                     loading={printing}
                     onClick={startPrinting}
                     key={'print'} icon={<FiPrinter/>}>Print</Button>
