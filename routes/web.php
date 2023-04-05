@@ -1,7 +1,5 @@
 <?php
 
-use App\Http\Controllers\SocialAuthController;
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -13,14 +11,7 @@ use App\Http\Controllers\SocialAuthController;
 |
 */
 
-Route::prefix('auth/google')->group(static function () {
-    Route::get('redirect', [SocialAuthController::class, 'redirectToGoogle']);
-    Route::get('callback', [SocialAuthController::class, 'handleGoogleCallback']);
-});
-
-Route::get('/account-not-found', static function () {
-    return view('auth.account-not-found');
-})->name('account-not-found');
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])->get('/{path?}', function () {
     return view('home');

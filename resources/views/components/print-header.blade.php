@@ -9,10 +9,7 @@
             <td style="background: #fff; width: 40%"></td>
             <td  style="text-align: right; background: #fff; line-height: 0.2;">
                 <div style="text-align: left">
-                    <h3>{{$employeeResource->department->name}}</h3>
-                    <p><b>Phone:</b> {{$employeeResource->telephone}}</p>
-                    <p><b>Email:</b> {{$employeeResource->work_email}}</p>
-                    <p><b>Staff ID:</b> {{$employeeResource->staff_id}}</p>
+
                 </div>
             </td>
         </tr>

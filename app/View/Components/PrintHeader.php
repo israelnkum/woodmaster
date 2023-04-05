@@ -2,23 +2,22 @@
 
 namespace App\View\Components;
 
-use App\Http\Resources\EmployeeResource;
-use App\Models\Employee;
+use App\Models\Pallet;
 use Closure;
 use Illuminate\Contracts\View\View;
 use Illuminate\View\Component;
 
 class PrintHeader extends Component
 {
-    protected $employeeId;
+    protected int $palletId;
     /**
      * Create a new component instance.
      *
      * @return void
      */
-    public function __construct($employeeId)
+    public function __construct($palletId)
     {
-        $this->employeeId = $employeeId;
+        $this->palletId = $palletId;
     }
     /**
      * Get the view / contents that represent the component.
@@ -27,9 +26,7 @@ class PrintHeader extends Component
      */
     public function render(): View|string|Closure
     {
-        $employee = Employee::find($this->employeeId);
-
-        $employeeResource = new EmployeeResource($employee);
-        return view('components.print-header', compact('employeeResource'));
+        $employee = Pallet::find($this->palletId);
+        return view('components.print-header', compact('employee'));
     }
 }

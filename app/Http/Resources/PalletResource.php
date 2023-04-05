@@ -19,12 +19,13 @@ class PalletResource extends JsonResource
         return [
             'id' => $this->id,
             'pallet_number' => $this->pallet_number,
-            'wood_count' => 0,
+            'wood_count' => $this->woods->count(),
+            'logs_count' => $this->logs->count(),
             'thickness' => $this->thickness,
             'species' => $this->species->name,
             'quality' => $this->quality->name,
             'quality_id' => $this->quality_id,
-            'logs' => $this->logs,
+            'pallet_logs' => $this->logs,
             'date_created' => Carbon::parse($this->created_at)->format('Y-m-d'),
             'species_id' => $this->species_id
         ];
