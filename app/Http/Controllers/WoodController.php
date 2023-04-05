@@ -48,15 +48,15 @@ class WoodController extends Controller
 
             DB::commit();
 
-//            Barcode::printBarcode([
-//                'length' => $request->length,
-//                'width' => $request->width,
-//                'log' => $request->log,
-//                'subLog' => $request->sub_log,
-//                'number' => $request->number,
-//                'sheets' => $request->sheets,
-//                'squareMeter' => $request->square_meter
-//            ]);
+            Barcode::printBarcode([
+                'length' => $request->length,
+                'width' => $request->width,
+                'log' => $request->log,
+                'subLog' => $request->sub_log,
+                'number' => $request->number,
+                'sheets' => $request->sheets,
+                'squareMeter' => $request->square_meter
+            ]);
 
             return new WoodResource($wood);
         } catch (Exception $exception) {
