@@ -14,7 +14,6 @@ function PalletForm(props) {
     const formValues = {
         id: 0,
         pallet_number: null,
-        log:  localStorage.getItem('palletLogNumber'),
         ...state.data
     }
 

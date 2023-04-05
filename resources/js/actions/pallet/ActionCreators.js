@@ -41,3 +41,11 @@ export const getPalletWood = (payload) => {
       payload: payload
   }
 }
+
+
+export const getPalletLogs = (payload) => {
+  return {
+    type: Types.GET_PALLET_LOGS,
+      payload: payload
+  }
+}

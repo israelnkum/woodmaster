@@ -4,17 +4,25 @@ import {Button, Card, Col, Form, Input, InputNumber, Row} from 'antd'
 import {connect} from 'react-redux'
 import {handleAddWood, handleUpdateWood} from "../../actions/wood/Action";
 import {TlaError, TlaSuccess} from "../../utils/messages";
+import {FiPrinter} from "react-icons/fi";
+import {handlePrintPalletReport} from "../../actions/pallet/Action";
 
 function WoodForm(props) {
     const [loading, setLoading] = useState(false)
+    const [printing, setPrinting] = useState(false)
     const [form] = Form.useForm();
-    const {addWood, updateWood} = props
+    const {addWood, updateWood, printReport, id, palletNumber} = props
     const lengthInputRef = useRef(null)
     const widthInputRef = useRef(null)
     const sheetsInputRef = useRef(null)
     const formValues = {
         id: 0,
         parcel: 'NULL'
+    }
+
+    const startPrinting = () => {
+        setPrinting(true)
+        printReport(id, palletNumber).then(() => setPrinting(false))
     }
 
     const submit = (values) => {
@@ -49,7 +57,12 @@ function WoodForm(props) {
     }, []);
 
     return (
-        <Card title={'Add Record'} size={'small'}>
+        <Card title={'Add Record'} size={'small'} extra={[
+            <Button
+                    loading={printing}
+                    onClick={startPrinting}
+                    key={'print'} icon={<FiPrinter/>}>Print</Button>
+        ]}>
             <Form form={form} preserve onFinish={submit} initialValues={formValues} layout="vertical">
                 <Row gutter={10}>
                     <Col span={4}>
@@ -123,13 +136,16 @@ function WoodForm(props) {
 
 WoodForm.propTypes = {
     addWood: PropTypes.func.isRequired,
+    id: PropTypes.any.isRequired,
+    palletNumber: PropTypes.any.isRequired,
+    printReport: PropTypes.func.isRequired,
     updateWood: PropTypes.func.isRequired
 }
 
-
 const mapDispatchToProps = (dispatch) => ({
     addWood: (payload) => dispatch(handleAddWood(payload)),
-    updateWood: (payload) => dispatch(handleUpdateWood(payload))
+    updateWood: (payload) => dispatch(handleUpdateWood(payload)),
+    printReport: (id, palletNumber) => dispatch(handlePrintPalletReport(id, palletNumber))
 })
 
 export default connect(null, mapDispatchToProps)(WoodForm)
