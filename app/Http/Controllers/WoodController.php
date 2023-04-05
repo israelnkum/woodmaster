@@ -44,6 +44,12 @@ class WoodController extends Controller
             $request['user_id'] = Auth::user()->id;
             $request['square_meter'] = round(($request->length * $request->width * $request->sheets) / 10000, 2);
 
+            if ($request->sub_log == '' || $request->sub_log == 'null' || $request->sub_log == null) {
+                return response()->json([
+                    'message' => "Sub log is required"
+                ], 400);
+            }
+            
             $wood = Wood::create($request->all());
 
             DB::commit();
