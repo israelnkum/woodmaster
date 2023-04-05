@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {addPallet, getPallet, getPalletLogs, getPallets, removePallet, updatePallet,} from './ActionCreators'
+import {addFilter, addPallet, getPallet, getPalletLogs, getPallets, removePallet, updatePallet,} from './ActionCreators'
 import {getWoods} from "../wood/ActionCreators";
 import {completeExport} from "../../utils";
 
@@ -45,10 +45,12 @@ export const handleGetSinglePallet = (id) => (dispatch) => {
     })
 }
 
-export const handleGetPalletWood = (id) => (dispatch) => {
+export const handleGetPalletWood = (params) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/pallet/${id}/wood`).then((res) => {
+        api().get(`/pallet/woods?${params}`).then((res) => {
             dispatch(getWoods(res.data))
+            params?.delete('page')
+            params && dispatch(addFilter(Object.fromEntries(params)))
             resolve(res)
         }).catch((err) => {
             reject(err)

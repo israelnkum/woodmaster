@@ -49,3 +49,10 @@ export const getPalletLogs = (payload) => {
       payload: payload
   }
 }
+
+export const addFilter = (payload) => {
+    return {
+        type: Types.ADD_PALLET_FILTER,
+        payload: payload
+    }
+}

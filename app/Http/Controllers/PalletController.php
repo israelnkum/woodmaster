@@ -12,6 +12,7 @@ use App\Traits\HasPrint;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -48,10 +49,10 @@ class PalletController extends Controller
      * @param $pallet
      * @return AnonymousResourceCollection
      */
-    public function getPalletWood($pallet): AnonymousResourceCollection
+    public function getPalletWood(Request $request): AnonymousResourceCollection
     {
-        $pal = Pallet::findOrFail($pallet);
-        return WoodResource::collection($pal->woods()->paginate(10));
+        $pal = Pallet::findOrFail($request->query('palletId'));
+        return WoodResource::collection($pal->woods()->paginate(100));
     }
 
     /**

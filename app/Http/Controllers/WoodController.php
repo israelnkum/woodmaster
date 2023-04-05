@@ -42,19 +42,19 @@ class WoodController extends Controller
         try {
             $request['number'] = $this->getNumber($request->pallet_log_id, $request->sub_log);
             $request['user_id'] = Auth::user()->id;
-            $request['square_meter'] = round(($request->length * $request->width * $request->sheets) / 10000, 2);
+            $request['square_meter'] = $this->getSquareMeter($request->length, $request->width, $request->sheets);
 
             if ($request->sub_log == '' || $request->sub_log == 'null' || $request->sub_log == null) {
                 return response()->json([
                     'message' => "Sub log is required"
                 ], 400);
             }
-            
+
             $wood = Wood::create($request->all());
 
             DB::commit();
 
-            Barcode::printBarcode([
+            /*Barcode::printBarcode([
                 'length' => $request->length,
                 'width' => $request->width,
                 'log' => $request->log,
@@ -62,7 +62,7 @@ class WoodController extends Controller
                 'number' => $request->number,
                 'sheets' => $request->sheets,
                 'squareMeter' => $request->square_meter
-            ]);
+            ]);*/
 
             return new WoodResource($wood);
         } catch (Exception $exception) {
@@ -88,6 +88,10 @@ class WoodController extends Controller
         return $number;
     }
 
+    public function getSquareMeter($length, $width, $sheets): float
+    {
+        return round(($length * $width * $sheets) / 10000, 2);
+    }
     /**
      * Display the specified resource.
      *
@@ -100,6 +104,8 @@ class WoodController extends Controller
         DB::beginTransaction();
         try {
             $wood = Wood::findOrFail($id);
+
+            $request['square_meter'] = $this->getSquareMeter($request->length, $request->width, $request->sheets);
             $wood->update($request->all());
 
             DB::commit();
