@@ -55,21 +55,13 @@ class WoodController extends Controller
 
             DB::commit();
 
-		$log = PalletLog::find($request->pallet_log_id);
-            Barcode::printBarcode([
-                'length' => $request->length,
-                'width' => $request->width,
-                'log' => $log->log_number,
-                'subLog' => $request->sub_log,
-                'number' => $request->number,
-                'sheets' => $request->sheets,
-                'squareMeter' => $request->square_meter
-            ]);
+            $log = PalletLog::find($request->pallet_log_id);
+
             if ($request->print_barcode == 'true') {
                 Barcode::printBarcode([
                     'length' => $request->length,
                     'width' => $request->width,
-                    'log' => $request->log,
+                    'log' => $log->log_number,
                     'subLog' => $request->sub_log,
                     'number' => $request->number,
                     'sheets' => $request->sheets,
@@ -115,7 +107,7 @@ class WoodController extends Controller
             Barcode::printBarcode([
                 'length' => $wood->length,
                 'width' => $wood->width,
-                'log' => $wood->log,
+                'log' => $wood->palletLog->log_number,
                 'subLog' => $wood->sub_log,
                 'number' => $wood->number,
                 'sheets' => $wood->sheets,
@@ -125,7 +117,6 @@ class WoodController extends Controller
             return response()->json([
                 'message' => 'Printing successful'
             ]);
-
         } catch (\Exception $exception) {
             Log::error('Print Barcode: ', [$exception]);
 
@@ -183,34 +174,6 @@ class WoodController extends Controller
             ]);
         } catch (Exception $exception) {
             Log::error('Delete Wood ', [$exception->getMessage()]);
-
-            return response()->json([
-                'message' => 'Something went wrong'
-            ], 400);
-        }
-    }
-
-    public function printBarcode($woodId): JsonResponse
-    {
-        try {
-            $wood = Wood::query()->findOrFail($woodId);
-
-            Barcode::printBarcode([
-                'length' => $wood->length,
-                'width' => $wood->width,
-                'log' => $wood->palletLog->log_number,
-                'subLog' => $wood->sub_log,
-                'number' => $wood->number,
-                'sheets' => $wood->sheets,
-                'squareMeter' => $wood->square_meter
-            ]);
-
-            return response()->json([
-                'message' => 'Printing successful'
-            ]);
-
-        }catch (\Exception $exception) {
-            Log::error('Print Barcode: ', [$exception]);
 
             return response()->json([
                 'message' => 'Something went wrong'
