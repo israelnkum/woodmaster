@@ -7,6 +7,7 @@ use App\Http\Requests\StoreWoodRequest;
 use App\Http\Requests\UpdateWoodRequest;
 use App\Http\Resources\WoodResource;
 use App\Models\Wood;
+use App\Models\PalletLog;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -54,10 +55,11 @@ class WoodController extends Controller
 
             DB::commit();
 
+		$log = PalletLog::find($request->pallet_log_id);
             Barcode::printBarcode([
                 'length' => $request->length,
                 'width' => $request->width,
-                'log' => $request->log,
+                'log' => $log->log_number,
                 'subLog' => $request->sub_log,
                 'number' => $request->number,
                 'sheets' => $request->sheets,
@@ -149,7 +151,7 @@ class WoodController extends Controller
             Barcode::printBarcode([
                 'length' => $wood->length,
                 'width' => $wood->width,
-                'log' => $wood->log,
+                'log' => $wood->palletLog->log_number,
                 'subLog' => $wood->sub_log,
                 'number' => $wood->number,
                 'sheets' => $wood->sheets,
