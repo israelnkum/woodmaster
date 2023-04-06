@@ -56,3 +56,10 @@ export const addFilter = (payload) => {
         payload: payload
     }
 }
+
+export const getPalletStats = (payload) => {
+    return {
+        type: Types.GET_PALLET_STATS,
+        payload: payload
+    }
+}

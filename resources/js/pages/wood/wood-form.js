@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Card, Col, Form, Input, InputNumber, Row} from 'antd'
+import {Button, Card, Checkbox, Col, Form, Input, InputNumber, Row} from 'antd'
 import {connect} from 'react-redux'
 import {handleAddWood, handleUpdateWood} from "../../actions/wood/Action";
 import {TlaError, TlaSuccess} from "../../utils/messages";
@@ -17,7 +17,8 @@ function WoodForm(props) {
     const sheetsInputRef = useRef(null)
     const formValues = {
         id: 0,
-        parcel: 'NULL'
+        parcel: 'NULL',
+        print_barcode: true
     }
 
     const startPrinting = () => {
@@ -38,7 +39,7 @@ function WoodForm(props) {
         formData.append('pallet_log_id', localStorage.getItem('palletLogId'));
         formData.append('sub_log', localStorage.getItem('subLog'));
         (values.id === 0 ? addWood : updateWood)(formData).then(() => {
-            form.resetFields()
+            // form.resetFields()
             setLoading(false)
             lengthInputRef.current.focus({cursor: 'all'})
             TlaSuccess();
@@ -58,7 +59,7 @@ function WoodForm(props) {
 
     return (
         <Card title={'Add Record'} size={'small'} extra={[
-            <Button className={'hidden'}
+            <Button
                     loading={printing}
                     onClick={startPrinting}
                     key={'print'} icon={<FiPrinter/>}>Print</Button>
@@ -117,7 +118,10 @@ function WoodForm(props) {
                             </Button>
                         </Form.Item>
                     </Col>
-                    <Col>
+                    <Col span={4} className={'pt-7'}>
+                        <Form.Item name="print_barcode" valuePropName="checked" >
+                            <Checkbox>Print Barcode</Checkbox>
+                        </Form.Item>
                         <Form.Item hidden name="id" label="ID"
                                    rules={[
                                        {

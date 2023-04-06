@@ -1,5 +1,14 @@
 import api from '../../utils/api'
-import {addFilter, addPallet, getPallet, getPalletLogs, getPallets, removePallet, updatePallet,} from './ActionCreators'
+import {
+    addFilter,
+    addPallet,
+    getPallet,
+    getPalletLogs,
+    getPallets,
+    getPalletStats,
+    removePallet,
+    updatePallet,
+} from './ActionCreators'
 import {getWoods} from "../wood/ActionCreators";
 import {completeExport} from "../../utils";
 
@@ -62,6 +71,17 @@ export const handleGetPalletLogs = (id) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().get(`/pallet/${id}/logs`).then((res) => {
             dispatch(getPalletLogs(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetPalletStats = (id) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/${id}/stats`).then((res) => {
+            dispatch(getPalletStats(res.data))
             resolve(res)
         }).catch((err) => {
             reject(err)

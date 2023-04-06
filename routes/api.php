@@ -34,9 +34,13 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::apiResource('/pallets', PalletController::class);
     Route::post('/wood/{id}/barcode', [WoodController::class, 'printBarcode']);
     Route::apiResource('/wood', WoodController::class);
+
+    Route::get('/pallet/{id}/report', [PalletController::class, 'getPalletReport']);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/pallet/{id}/report', [PalletController::class, 'getPalletReport']);
+
+
+Route::get('/pallet/{id}/stats', [PalletController::class, 'getPalletStatistics']);

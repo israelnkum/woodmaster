@@ -8,11 +8,12 @@ import TlaEdit from "../../commons/tla-edit";
 import {FiPrinter} from "react-icons/fi";
 import {handleGetPalletWood} from "../../actions/pallet/Action";
 import {useParams} from "react-router";
+import TlaConfirm from "../../commons/TlaConfirm";
+import {TlaSuccess} from "../../utils/messages";
 
 const {Column} = Table
 
 function WoodTable(props) {
-    // eslint-disable-next-line no-unused-vars
     const {wood, getWood, deleteWood, filter, printBarCode} = props
 
     const {id} = useParams()
@@ -34,9 +35,9 @@ function WoodTable(props) {
                 <Column title="Action" render={(value) => (
                     <Space>
                         <TlaEdit icon data={value} link={'/app/wood/form'} type={'text'}/>
-                        {/*<TlaConfirm title={ 'Wood' } callBack={ () => {
-                            deleteWood(value.id).then(() => TlaSuccess('Wood Wood'))
-                        } }/>*/}
+                        <TlaConfirm title={ 'Wood' } callBack={ () => {
+                            deleteWood(value.id).then(() => TlaSuccess('Wood Deleted'))
+                        } }/>
                         <Button onClick={() => {
                             printBarCode(value.id)
                         }} title={'Print Barcode'} icon={<FiPrinter/>}/>

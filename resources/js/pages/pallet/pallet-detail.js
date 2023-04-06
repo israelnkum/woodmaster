@@ -3,11 +3,11 @@ import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import {handleDeletePallet, handleGetPalletWood, handleGetSinglePallet} from "../../actions/pallet/Action";
 import {useOutletContext, useParams} from "react-router";
-import {Card, Col, Descriptions, Divider, Input, Row, Spin} from "antd";
+import {Card, Col, Row, Spin, Tabs} from "antd";
 import WoodTable from "../wood/wood-table";
-import TlaEdit from "../../commons/tla-edit";
 import WoodForm from "../wood/wood-form";
-import PalletLogs from "./pallet-logs";
+import PalletInfo from "./pallet-info";
+import PalletStats from "./pallet-stats";
 
 function PalletDetail(props) {
     const {getPallet, getPalletWood, palletWood, pallet, palletLogs, filter} = props
@@ -31,42 +31,30 @@ function PalletDetail(props) {
         getPalletWood(new URLSearchParams(filter)).then(() => setLoadingWood(false))
     }, [])
 
+
+
     return (<div className={'pb-10'}>
             <Spin spinning={loadingWood || loading}>
                 {/*<FilterPallets/>*/}
                 {(!loading && !loadingWood) && <Row gutter={10}>
-                    <Col span={20} xs={24} sm={24} md={20}>
+                    <Col span={18} xs={24} sm={24} md={18}>
                         <WoodForm id={id} palletNumber={pallet?.pallet_number}/>
                         <WoodTable wood={palletWood}/>
                     </Col>
-                    <Col span={4} xs={24} sm={24} md={4}>
-                        <Card loading={loading}>
-                            <div className={'mb-2'}>
-                                <div>
-                                    <PalletLogs/>
-                                </div>
-                                <div>
-                                    <p className={'uppercase'}>Sub&nbsp;Log</p>
-                                    <Input defaultValue={localStorage.getItem('subLog')}
-                                           onChange={(e) => {
-                                               localStorage.setItem('subLog', e.target.value)
-                                           }}/>
-                                </div>
-                            </div>
-                            <Divider className={'!m-1'}/>
-                            <Descriptions layout='vertical' size={'small'} column={{sm: 1}}>
-                                <Descriptions.Item label="PALLET #">{pallet?.pallet_number}</Descriptions.Item>
-                                <Descriptions.Item label="THICKNESS">{pallet?.thickness}</Descriptions.Item>
-                                <Descriptions.Item label="QUALITY">{pallet?.quality}</Descriptions.Item>
-                                <Descriptions.Item label="SPECIES">{pallet?.species}</Descriptions.Item>
-                                <Descriptions.Item label="DATE">{pallet?.date_created}</Descriptions.Item>
-                            </Descriptions>
-                            <Divider className={'!m-1'}/>
-                            <div className={'flex justify-center'}>
-                                <TlaEdit icon text={"Edit Pallet"}
-                                         data={{...pallet, log: palletLogs[palletLogs?.length - 1]?.log_number}}
-                                         link={'/app/pallets/form'} type={'text'}/>
-                            </div>
+                    <Col span={6} xs={24} sm={24} md={6}>
+                        <Card>
+                            <Tabs items={[
+                                {
+                                    key: 'detail',
+                                    label: 'Pallet Info',
+                                    children: <PalletInfo pallet={pallet} palletLogs={palletLogs} loading={loading}/>
+                                },
+                                {
+                                    key: 'pallet-info',
+                                    label: 'Pallet Stats',
+                                    children: <PalletStats/>
+                                }
+                            ]}/>
                         </Card>
                     </Col>
                 </Row>}

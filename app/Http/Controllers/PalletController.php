@@ -78,6 +78,27 @@ class PalletController extends Controller
         return $this->pdf('print.pallet.report', $resource, 'Pallet-' . $pallet->pallet_number);
     }
 
+
+    /**
+     * @param $palletId
+     * @return JsonResponse
+     */
+    public function getPalletStatistics($palletId): JsonResponse
+    {
+        $pallet = Pallet::query()->find($palletId);
+
+        $res = $pallet->woods->groupBy(['palletLog.log_number', 'sub_log'])
+            ->mapToGroups(function ($subLogs, $log) {
+                return [
+                    'items' => collect($subLogs)->mapToGroups(function ($first, $last) use ($log) {
+                        return [$log . '/' . $last => count($first)];
+                    })
+                ];
+            });
+
+        return response()->json($res);
+    }
+
     /**
      * Store a newly created resource in storage.
      *

@@ -32,6 +32,7 @@ class AppSetup extends Command
     {
         try {
             $this->output->title('Application Setup Started');
+
             Artisan::call('migrate:fresh');
             Artisan::call('db:seed');
 
@@ -39,9 +40,9 @@ class AppSetup extends Command
 
             return CommandAlias::SUCCESS;
         } catch (\Exception $exception) {
-
             Log::info('setup', [$exception]);
             $this->output->error($exception->getMessage());
+
             return CommandAlias::FAILURE;
         }
     }
