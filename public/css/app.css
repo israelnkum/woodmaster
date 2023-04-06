@@ -10763,6 +10763,9 @@ button,
 .flex{
   display: flex;
 }
+.\!flex{
+  display: flex !important;
+}
 .table{
   display: table;
 }
@@ -10808,6 +10811,12 @@ button,
 .w-1{
   width: 0.25rem;
 }
+.w-1\/2{
+  width: 50%;
+}
+.\!w-full{
+  width: 100% !important;
+}
 .max-w-6xl{
   max-width: 72rem;
 }
@@ -10843,6 +10852,12 @@ button,
 }
 .justify-between{
   justify-content: space-between;
+}
+.\!justify-between{
+  justify-content: space-between !important;
+}
+.gap-2{
+  gap: 0.5rem;
 }
 .gap-x-2{
   -moz-column-gap: 0.5rem;

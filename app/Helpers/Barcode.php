@@ -14,11 +14,11 @@ class Barcode
     {
         $printContent = "^XA
                         ^CF0,50
-                        ^FO20,30^FD".$data['log']."/".$data['subLog']."                   ".$data['number']."^FS
+                        ^FO20,30^FD".$data['log']."/".$data['subLog']."                         ".$data['number']."^FS
                         ^CF0,30
                         ^FX Third section with bar code.
                         ^BY3,3,80
-                        ^FO15,70^BC,90,N,N
+                        ^FO20,70^BC,90,N,N
                         ^FD".$data['log']."/".$data['subLog']."-".$data['squareMeter']."^FS
                         ^CF0,50
                         ^FO20,170^FD".$data['length']."x".$data['width']."       ".$data['sheets']."          ".$data['squareMeter']."^FS

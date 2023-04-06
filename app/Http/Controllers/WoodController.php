@@ -7,6 +7,7 @@ use App\Http\Requests\StoreWoodRequest;
 use App\Http\Requests\UpdateWoodRequest;
 use App\Http\Resources\WoodResource;
 use App\Models\Wood;
+use App\Models\PalletLog;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
@@ -42,27 +43,31 @@ class WoodController extends Controller
         try {
             $request['number'] = $this->getNumber($request->pallet_log_id, $request->sub_log);
             $request['user_id'] = Auth::user()->id;
-            $request['square_meter'] = round(($request->length * $request->width * $request->sheets) / 10000, 2);
+            $request['square_meter'] = $this->getSquareMeter($request->length, $request->width, $request->sheets);
 
             if ($request->sub_log == '' || $request->sub_log == 'null' || $request->sub_log == null) {
                 return response()->json([
                     'message' => "Sub log is required"
                 ], 400);
             }
-            
+
             $wood = Wood::create($request->all());
 
             DB::commit();
 
-            Barcode::printBarcode([
-                'length' => $request->length,
-                'width' => $request->width,
-                'log' => $request->log,
-                'subLog' => $request->sub_log,
-                'number' => $request->number,
-                'sheets' => $request->sheets,
-                'squareMeter' => $request->square_meter
-            ]);
+            $log = PalletLog::find($request->pallet_log_id);
+
+            if ($request->print_barcode == 'true') {
+                Barcode::printBarcode([
+                    'length' => $request->length,
+                    'width' => $request->width,
+                    'log' => $log->log_number,
+                    'subLog' => $request->sub_log,
+                    'number' => $request->number,
+                    'sheets' => $request->sheets,
+                    'squareMeter' => $request->square_meter
+                ]);
+            }
 
             return new WoodResource($wood);
         } catch (Exception $exception) {
@@ -77,7 +82,8 @@ class WoodController extends Controller
 
     public function getNumber($pallet_log_id, $subLog): int
     {
-        $query = Wood::query()->where('pallet_log_id', $pallet_log_id)->where('sub_log', $subLog)->orderBy('created_at', 'desc')->first();
+        $query = Wood::query()->where('pallet_log_id', $pallet_log_id)->where('sub_log', $subLog)->orderBy('created_at',
+            'desc')->first();
 
         if ($query) {
             $number = $query->number + 1;
@@ -86,6 +92,38 @@ class WoodController extends Controller
         }
 
         return $number;
+    }
+
+    public function getSquareMeter($length, $width, $sheets): float
+    {
+        return round(($length * $width * $sheets) / 10000, 2);
+    }
+
+    public function printBarcode($woodId): JsonResponse
+    {
+        try {
+            $wood = Wood::query()->findOrFail($woodId);
+
+            Barcode::printBarcode([
+                'length' => $wood->length,
+                'width' => $wood->width,
+                'log' => $wood->palletLog->log_number,
+                'subLog' => $wood->sub_log,
+                'number' => $wood->number,
+                'sheets' => $wood->sheets,
+                'squareMeter' => $wood->square_meter
+            ]);
+
+            return response()->json([
+                'message' => 'Printing successful'
+            ]);
+        } catch (\Exception $exception) {
+            Log::error('Print Barcode: ', [$exception]);
+
+            return response()->json([
+                'message' => 'Something went wrong'
+            ], 400);
+        }
     }
 
     /**
@@ -100,6 +138,8 @@ class WoodController extends Controller
         DB::beginTransaction();
         try {
             $wood = Wood::findOrFail($id);
+
+            $request['square_meter'] = $this->getSquareMeter($request->length, $request->width, $request->sheets);
             $wood->update($request->all());
 
             DB::commit();
@@ -134,34 +174,6 @@ class WoodController extends Controller
             ]);
         } catch (Exception $exception) {
             Log::error('Delete Wood ', [$exception->getMessage()]);
-
-            return response()->json([
-                'message' => 'Something went wrong'
-            ], 400);
-        }
-    }
-
-    public function printBarcode($woodId): JsonResponse
-    {
-        try {
-            $wood = Wood::query()->findOrFail($woodId);
-
-            Barcode::printBarcode([
-                'length' => $wood->length,
-                'width' => $wood->width,
-                'log' => $wood->log,
-                'subLog' => $wood->sub_log,
-                'number' => $wood->number,
-                'sheets' => $wood->sheets,
-                'squareMeter' => $wood->square_meter
-            ]);
-
-            return response()->json([
-                'message' => 'Printing successful'
-            ]);
-
-        }catch (\Exception $exception) {
-            Log::error('Print Barcode: ', [$exception]);
 
             return response()->json([
                 'message' => 'Something went wrong'
