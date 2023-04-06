@@ -49,7 +49,16 @@ function PalletForm(props) {
                                    }
                                ]}
                                label="Thickness">
-                        <Input size={'large'}/>
+                        <Select size={'large'} showSearch>
+                            <Select.Option value={'0.5mm'}>0.5mm</Select.Option>
+                            <Select.Option value={'0.53mm'}>0.53mm</Select.Option>
+                            <Select.Option value={'0.6mm'}>0.6mm</Select.Option>
+                            <Select.Option value={'1mm'}>1mm</Select.Option>
+                            <Select.Option value={'1.4mm'}>1.4mm</Select.Option>
+                            <Select.Option value={'1.5mm'}>1.5mm</Select.Option>
+                            <Select.Option value={'1.6mm'}>1.6mm</Select.Option>
+                            <Select.Option value={'1.8mm'}>1.8mm</Select.Option>
+                        </Select>
                     </Form.Item>
                 </Col>
                 <Col span={12}>

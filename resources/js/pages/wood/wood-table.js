@@ -7,17 +7,23 @@ import {handleDeleteWood, handlePrintBarcode} from "../../actions/wood/Action";
 import TlaEdit from "../../commons/tla-edit";
 import {FiPrinter} from "react-icons/fi";
 import {handleGetPalletWood} from "../../actions/pallet/Action";
+import {useParams} from "react-router";
+import TlaConfirm from "../../commons/TlaConfirm";
+import {TlaSuccess} from "../../utils/messages";
 
-const { Column } = Table
+const {Column} = Table
 
-function WoodTable (props) {
-    // eslint-disable-next-line no-unused-vars
-    const {wood,getWood, deleteWood, filter, printBarCode } = props
+function WoodTable(props) {
+    const {wood, getWood, deleteWood, filter, printBarCode} = props
 
+    const {id} = useParams()
     return (
         <div className={'pb-10'}>
             {/*<FilterWood/>*/}
-            <TlaTableWrapper filterObj={filter} callbackFunction={getWood} data={wood?.data} meta={wood?.meta}>
+            <TlaTableWrapper filterObj={{...filter, palletId: id}}
+                             callbackFunction={getWood}
+                             data={wood?.data}
+                             meta={wood?.meta}>
                 <Column title="number" dataIndex={'number'}/>
                 <Column title="log" dataIndex={'log'}/>
                 <Column title="sub log" dataIndex={'sub_log'}/>
@@ -26,15 +32,17 @@ function WoodTable (props) {
                 <Column title="sheets" dataIndex={'sheets'}/>
                 <Column title="square meter" dataIndex={'square_meter'}/>
                 {/*<Column title="parcel" dataIndex={'parcel'}/>*/}
-                <Column title="Action" render={ (value) => (
+                <Column title="Action" render={(value) => (
                     <Space>
-                        <TlaEdit icon data={ value } link={ '/app/wood/form' } type={ 'text' }/>
-                        {/*<TlaConfirm title={ 'Wood' } callBack={ () => {
-                            deleteWood(value.id).then(() => TlaSuccess('Wood Wood'))
-                        } }/>*/}
-                        <Button onClick={() => { printBarCode(value.id)}} title={'Print Barcode'} icon={<FiPrinter/>}/>
+                        <TlaEdit icon data={value} link={'/app/wood/form'} type={'text'}/>
+                        <TlaConfirm title={ 'Wood' } callBack={ () => {
+                            deleteWood(value.id).then(() => TlaSuccess('Wood Deleted'))
+                        } }/>
+                        <Button onClick={() => {
+                            printBarCode(value.id)
+                        }} title={'Print Barcode'} icon={<FiPrinter/>}/>
                     </Space>
-                ) }/>
+                )}/>
             </TlaTableWrapper>
         </div>
     )

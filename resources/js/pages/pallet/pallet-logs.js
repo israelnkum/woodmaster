@@ -22,6 +22,7 @@ function PalletLogs(props) {
 
     return (
         <div className={'mb-2'}>
+            <p className={'uppercase'}>Log</p>
             <Spin spinning={loading}>
                 {
                     !loading &&
