@@ -54,6 +54,16 @@ class PalletController extends Controller
             return $q->where('thickness', $request->thickness);
         });
 
+        $pallets->when($request->has('pallet_number') &&
+            $request->pallet_number !== '', function ($q) use ($request) {
+            return $q->where('pallet_number', 'like', '%' . $request->pallet_number . '%');
+        });
+
+//        $pallets->when($request->has('log_number') &&
+//            $request->log_number !== 'all', function ($q) use ($request) {
+//            return $q->logs()->where('log_number', $request->log_number);
+//        });
+
         return PalletResource::collection($pallets->paginate(10));
     }
 
@@ -74,6 +84,12 @@ class PalletController extends Controller
     {
         $pal = Pallet::findOrFail($request->query('palletId'));
         return WoodResource::collection($pal->woods()->paginate(100));
+    }
+
+    public function getPalletSubLogs($palletId)
+    {
+        $pal = Pallet::findOrFail($palletId);
+        return response()->json($pal->woods()->distinct('sub_log')->pluck('sub_log'));
     }
 
     /**

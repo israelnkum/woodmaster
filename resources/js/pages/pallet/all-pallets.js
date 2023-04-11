@@ -47,6 +47,7 @@ function AllPallets(props) {
                     <Column className={'cursor-pointer'} onCell={Details} title="quality" dataIndex={'quality'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="species" dataIndex={'species'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="date created" dataIndex={'date_created'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="square meter" dataIndex={'square_meter'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="logs" dataIndex={'logs_count'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="woods" dataIndex={'wood_count'}/>
                     <Column className={'cursor-pointer'} title="Action" render={(value) => (

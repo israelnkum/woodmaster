@@ -20,6 +20,7 @@ class PalletResource extends JsonResource
             'id' => $this->id,
             'pallet_number' => $this->pallet_number,
             'wood_count' => $this->woods->count(),
+            'square_meter' => round($this->woods->sum('square_meter'), 2),
             'logs_count' => $this->logs->count(),
             'thickness' => $this->thickness,
             'species' => $this->species->name,

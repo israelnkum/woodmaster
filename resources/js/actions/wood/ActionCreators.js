@@ -22,6 +22,13 @@ export const addWood = (payload) => {
     }
 }
 
+export const moveWood = (payload) => {
+    return {
+        type: Types.MOVE_WOOD,
+        payload: payload
+    }
+}
+
 export const removeWood = (id) => {
   return {
     type: Types.REMOVE_WOOD,
