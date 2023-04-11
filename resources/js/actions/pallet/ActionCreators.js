@@ -49,6 +49,12 @@ export const getPalletLogs = (payload) => {
       payload: payload
   }
 }
+export const getPalletSubLogs = (payload) => {
+  return {
+    type: Types.GET_PALLET_SUB_LOGS,
+      payload: payload
+  }
+}
 
 export const addFilter = (payload) => {
     return {

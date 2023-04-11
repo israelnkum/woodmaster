@@ -23,7 +23,13 @@ function WoodTable(props) {
             <TlaTableWrapper filterObj={{...filter, palletId: id}}
                              callbackFunction={getWood}
                              data={wood?.data}
-                             meta={wood?.meta}>
+                             meta={wood?.meta}
+                             /*extra={
+                                 <TlaAddNew link={`/app/pallet/${id}/woods/move`}>
+                                     <Button>Move</Button>
+                                 </TlaAddNew>
+                             }*/
+            >
                 <Column title="number" dataIndex={'number'}/>
                 <Column title="log" dataIndex={'log'}/>
                 <Column title="sub log" dataIndex={'sub_log'}/>
@@ -35,9 +41,9 @@ function WoodTable(props) {
                 <Column title="Action" render={(value) => (
                     <Space>
                         <TlaEdit icon data={value} link={'/app/wood/form'} type={'text'}/>
-                        <TlaConfirm title={ 'Wood' } callBack={ () => {
+                        <TlaConfirm title={'Wood'} callBack={() => {
                             deleteWood(value.id).then(() => TlaSuccess('Wood Deleted'))
-                        } }/>
+                        }}/>
                         <Button onClick={() => {
                             printBarCode(value.id)
                         }} title={'Print Barcode'} icon={<FiPrinter/>}/>

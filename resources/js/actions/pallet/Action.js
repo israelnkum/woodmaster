@@ -5,7 +5,7 @@ import {
     getPallet,
     getPalletLogs,
     getPallets,
-    getPalletStats,
+    getPalletStats, getPalletSubLogs,
     removePallet,
     updatePallet,
 } from './ActionCreators'
@@ -71,6 +71,17 @@ export const handleGetPalletLogs = (id) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().get(`/pallet/${id}/logs`).then((res) => {
             dispatch(getPalletLogs(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleGetPalletSubLogs = (id) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/${id}/sub-logs`).then((res) => {
+            dispatch(getPalletSubLogs(res.data))
             resolve(res)
         }).catch((err) => {
             reject(err)

@@ -13,6 +13,7 @@ use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class Controller extends BaseController
 {
@@ -24,9 +25,9 @@ class Controller extends BaseController
     public function getCommonData(): JsonResponse
     {
         $loggedInUser = Auth::user();
-
         $species = Species::all();
         $qualities = Quality::all();
+        $logNumbers = PalletLog::query()->distinct('log_number')->pluck('log_number');
         $pallets = Pallet::query()->count();
         $palletLogs = PalletLog::query()->count();
         $woods = Wood::query()->count();
@@ -40,6 +41,7 @@ class Controller extends BaseController
         return response()->json([
             'species' => $species,
             'qualities' => $qualities,
+            'logNumbers' => $logNumbers,
             'counts' => [
                 'species' => $species->count(),
                 'qualities' => $qualities->count(),

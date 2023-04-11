@@ -1,5 +1,5 @@
 import api from '../../utils/api'
-import {addWood, getWood, getWoods, removeWood, updateWood,} from './ActionCreators'
+import {addWood, getWood, getWoods, moveWood, removeWood, updateWood,} from './ActionCreators'
 
 /**
  * Store a newly created resource in storage.
@@ -10,6 +10,16 @@ export const handleAddWood = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().post('/wood', data).then((res) => {
             dispatch(addWood(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+export const handleMoveWood = (data) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().post('/wood/move', data).then((res) => {
+            dispatch(moveWood(res.data))
             resolve(res)
         }).catch((err) => {
             reject(err)

@@ -5,6 +5,8 @@ const initialState = {
         meta: {}
     },
     filter: {
+        pallet_number: '',
+        log_number: 'all',
         species_id: 'all',
         quality_id: 'all',
         thickness: 'all'

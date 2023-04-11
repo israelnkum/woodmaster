@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
-import {Col, DatePicker, Form, Row} from "antd";
+import {Col, Form, Input, Row} from "antd";
 import FilterWrapper from "../../commons/filter/filter-wrapper";
-import {handlePrintPalletReport, handleGetAllPallets} from "../../actions/pallet/Action";
+import {handleGetAllPallets, handlePrintPalletReport} from "../../actions/pallet/Action";
 import TlaSelect from "../../commons/tla/TlaSelect";
 import {thicknesses} from "../../utils";
 
 function FilterPallets(props) {
-    const {submitFilter, filter, exportFilter, species, qualities} = props
+    const {submitFilter, filter, exportFilter, species, logNumbers, qualities} = props
     const initials = {
         ...filter,
         export: false
@@ -17,11 +17,16 @@ function FilterPallets(props) {
     return (
         <FilterWrapper initialValue={initials} submitFilter={submitFilter} exportFilter={exportFilter}>
             <Row gutter={10}>
-               {/* <Col span={6} xs={24} sm={24} md={6} lg={6} xl={6}>
-                    <Form.Item name="date" label="Date Range">
-                        <DatePicker.RangePicker size={'large'}/>
+                <Col span={3} xs={24} sm={24} md={3} lg={3} xl={3}>
+                    <Form.Item
+                        label={"Pallet Number"}
+                        name={'pallet_number'}>
+                        <Input size={'large'}/>
                     </Form.Item>
-                </Col>*/}
+                </Col>
+                {/*<Col span={3} xs={24} sm={24} md={3} lg={3} xl={3}>*/}
+                {/*    <TlaSelect hasAll name={'log_number'} optionKey={'self'} options={logNumbers} label={'Log Number'}/>*/}
+                {/*</Col>*/}
                 <Col span={6} xs={24} sm={24} md={6} lg={6} xl={6}>
                     <TlaSelect hasAll name={'species_id'} optionKey={'name'} options={species} label={'species'}/>
                 </Col>
@@ -41,12 +46,14 @@ FilterPallets.propTypes = {
     exportFilter: PropTypes.func,
     filter: PropTypes.object,
     species: PropTypes.array,
+    logNumbers: PropTypes.array,
     qualities: PropTypes.array
 }
 
 const mapStateToProps = (state) => ({
     filter: state.palletReducer.filter,
     species: state.commonReducer.commons.species,
+    logNumbers: state.commonReducer.commons.logNumbers,
     qualities: state.commonReducer.commons.qualities
 })
 
