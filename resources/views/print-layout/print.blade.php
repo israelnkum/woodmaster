@@ -42,7 +42,7 @@
 </head>
 <body>
 <div>
-    {{--    <x-print-header :employee-dashboard-id="$data[0]->employee_id"/>--}}
+        <x-print-header :pallet-id="$data['palletId']"/>
 </div>
 <table border="0">
     <thead align="left">

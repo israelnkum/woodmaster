@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\EmployeeExport;
+use App\Exports\PalletWoodsExport;
 use App\Http\Requests\StorePalletRequest;
 use App\Http\Requests\UpdatePalletRequest;
+use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\PalletResource;
 use App\Http\Resources\WoodResource;
 use App\Models\Pallet;
@@ -18,6 +21,8 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class PalletController extends Controller
 {
@@ -27,13 +32,29 @@ class PalletController extends Controller
      * Display a listing of the resource.
      *
      *
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
-    public function index(): AnonymousResourceCollection
+    public function index(Request $request): AnonymousResourceCollection
     {
-        $pallets = Pallet::query()->paginate(10);
+        $pallets = Pallet::query();
 
-        return PalletResource::collection($pallets);
+        $pallets->when($request->has('species_id') &&
+            $request->species_id !== 'all', function ($q) use ($request) {
+            return $q->where('species_id', $request->species_id);
+        });
+
+        $pallets->when($request->has('quality_id') &&
+            $request->quality_id !== 'all', function ($q) use ($request) {
+            return $q->where('quality_id', $request->quality_id);
+        });
+
+        $pallets->when($request->has('thickness') &&
+            $request->thickness !== 'all', function ($q) use ($request) {
+            return $q->where('thickness', $request->thickness);
+        });
+
+        return PalletResource::collection($pallets->paginate(10));
     }
 
     /**
@@ -46,7 +67,7 @@ class PalletController extends Controller
     }
 
     /**
-     * @param $pallet
+     * @param Request $request
      * @return AnonymousResourceCollection
      */
     public function getPalletWood(Request $request): AnonymousResourceCollection
@@ -65,17 +86,26 @@ class PalletController extends Controller
     }
 
     /**
+     * @param Request $request
      * @param $palletId
-     * @return Response
+     * @return Response|BinaryFileResponse
      */
-    public function getPalletReport($palletId): Response
+    public function getPalletReport(Request $request, $palletId): Response|BinaryFileResponse
     {
         $pallet = Pallet::query()->find($palletId);
 
-        $resource = WoodResource::collection($pallet->woods)->collection
+        $woodResource = WoodResource::collection($pallet->woods)->collection
             ->groupBy(['palletLog.log_number', 'sub_log']);
 
-        return $this->pdf('print.pallet.report', $resource, 'Pallet-' . $pallet->pallet_number);
+        if ($request->query('export') === 'true') {
+            return Excel::download(new PalletWoodsExport($woodResource, $pallet),
+                'Pallet-wood-report.xlsx');
+        }
+
+        return $this->pdf('print.pallet.report', [
+            'palletId' => $palletId,
+            'woodResource' => $woodResource
+        ], 'Pallet-' . $pallet->pallet_number);
     }
 
 

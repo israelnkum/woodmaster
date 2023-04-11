@@ -4,7 +4,11 @@ const initialState = {
         data: [],
         meta: {}
     },
-    filter: {},
+    filter: {
+        species_id: 'all',
+        quality_id: 'all',
+        thickness: 'all'
+    },
     pallet: {},
     palletStats: {},
     palletLogs: []

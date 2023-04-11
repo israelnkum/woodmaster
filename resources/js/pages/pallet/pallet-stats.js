@@ -23,12 +23,16 @@ function PalletStats(props) {
                 {
                     !loading &&
                     <>
+                        <div className={'!flex !justify-between py-2 border-b font-bold'}>
+                            <p>Log/Sub Log</p>
+                            <p>Total</p>
+                        </div>
                         {
                             Object.keys(palletStats).length === 0 ? <>No Data</> :
                                 palletStats?.items.map((item) => {
                                     return (
                                         Object.keys(item).map((itm, index) => (
-                                            <div className={'!flex !justify-between'} key={index}>
+                                            <div className={'!flex !justify-between py-2 border-b'} key={index}>
                                                 <p>{itm}</p>
                                                 <p>{item[itm][0]}</p>
                                             </div>

@@ -10,6 +10,7 @@ import TlaEdit from "../../commons/tla-edit";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import {useNavigate} from "react-router-dom";
+import FilterPallets from "./filter-pallets";
 
 const {Column} = Table
 
@@ -38,7 +39,7 @@ function AllPallets(props) {
 
     return (
         <div className={'pb-10'}>
-            {/*<FilterPallets/>*/}
+            <FilterPallets/>
             <ViewAllWrapper loading={loading} noData={data.length === 0}>
                 <TlaTableWrapper filterObj={filter} callbackFunction={getPallets} data={data} meta={meta}>
                     <Column className={'cursor-pointer'} onCell={Details} title="pallet #" dataIndex={'pallet_number'}/>

@@ -1,11 +1,26 @@
 import React from 'react'
+import Widget from "./widget";
+import {connect} from "react-redux";
+import PropTypes from "prop-types";
 
-function Dashboard() {
+function Dashboard({ counts }) {
     return (
-        <div className={'mt-1.5 w-full flex'}>
-            <h1 className={'my-auto mx-auto'}>Coming Soon</h1>
+        <div className={'mt-1.5 w-full flex gap-2'}>
+            <Widget title={'Total Pallets'} value={counts?.pallets}/>
+            <Widget title={'Total Species'} value={counts?.species}/>
+            <Widget title={'Total Qualities'} value={counts?.qualities}/>
+            <Widget title={'Total Logs'} value={counts?.palletLogs}/>
+            <Widget title={'Total Woods'} value={counts?.woods}/>
         </div>
     )
 }
 
-export default Dashboard
+Dashboard.propTypes = {
+    counts: PropTypes.object.isRequired
+}
+
+const mapStateToProps = (stata) => ({
+    counts: stata.commonReducer.commons.counts
+})
+
+export default connect(mapStateToProps)(Dashboard)

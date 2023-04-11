@@ -11,14 +11,14 @@ function PalletLogs(props) {
     const {id} = useParams()
 
     useEffect(() => {
+        setLoading(true)
         getPalletLogs(id).then((res) => {
             const {id, log_number} = res.data[res.data.length - 1]
             localStorage.setItem('palletLogNumber', log_number)
             localStorage.setItem('palletLogId', id)
             setLoading(false)
         })
-    }, [])
-
+    }, [localStorage.getItem('palletLogId')])
 
     return (
         <div className={'mb-2'}>

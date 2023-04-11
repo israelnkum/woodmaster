@@ -96,12 +96,13 @@ export const handleGetPalletStats = (id) => (dispatch) => {
  */
 export const handleUpdatePallet = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().post(`/pallets/${data.get('id')}`, data, {
-            // headers: { 'Content-type': 'multipart/employee-dashboard-data' }
-        }).then((res) => {
-            dispatch(updatePallet(res.data))
-            resolve(res)
-        }).catch((err) => {
+        data['_method'] = 'PUT';
+
+        api().post(`/pallets/${data.id}`, data)
+            .then((res) => {
+                dispatch(updatePallet(res.data))
+                resolve(res)
+            }).catch((err) => {
             reject(err)
         })
     })
@@ -124,9 +125,9 @@ export const handleDeletePallet = (id) => (dispatch) => {
 }
 
 
-export const handlePrintPalletReport = (id, palletNumber) => async () => {
+export const handlePrintPalletReport = (id, palletNumber, excel = true) => async () => {
     return new Promise((resolve, reject) => {
-        api().get(`/pallet/${id}/report`, { responseType: 'blob' })
+        api().get(`/pallet/${id}/report?export=${excel}`, {responseType: 'blob'})
             .then((res) => {
                 completeExport(res.data, `pallet-${palletNumber}`)
                 resolve()
