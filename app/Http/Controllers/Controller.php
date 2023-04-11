@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Pallet;
+use App\Models\PalletLog;
 use App\Models\Quality;
 use App\Models\Species;
+use App\Models\Wood;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
@@ -24,6 +27,9 @@ class Controller extends BaseController
 
         $species = Species::all();
         $qualities = Quality::all();
+        $pallets = Pallet::query()->count();
+        $palletLogs = PalletLog::query()->count();
+        $woods = Wood::query()->count();
 
         if (!$loggedInUser) {
             return response()->json([
@@ -33,7 +39,14 @@ class Controller extends BaseController
 
         return response()->json([
             'species' => $species,
-            'qualities' => $qualities
+            'qualities' => $qualities,
+            'counts' => [
+                'species' => $species->count(),
+                'qualities' => $qualities->count(),
+                'pallets' => $pallets,
+                'palletLogs' => $palletLogs,
+                'woods' => $woods,
+            ]
         ]);
     }
 

@@ -22,7 +22,7 @@ function FilterWrapper (props) {
 
     const FilterTitle = () => (
         <div className={'flex gap-x-2 justify-start'}>
-            <Button style={{ background: "darkgreen", color: "white", borderColor: "darkgreen" }} loading={loading} onClick={() => {
+            {/*<Button style={{ background: "darkgreen", color: "white", borderColor: "darkgreen" }} loading={loading} onClick={() => {
                 form.setFieldsValue({export: true, print: false })
                 completeExport(form.getFieldsValue())
             }}>
@@ -33,12 +33,12 @@ function FilterWrapper (props) {
                 completeExport(form.getFieldsValue())
             }}>
                 &nbsp;Print
-            </Button>
+            </Button>*/}
         </div>
     )
     return (
         <Form form={form} onFinish={onFinish} layout={'vertical'} initialValues={{ ...initialValue, export: false}}>
-            <Card title={<FilterTitle/>} size={'small'} extra={[
+            <Card title={'Filter'} size={'small'} extra={[
                 <Button key={'filter'} icon={<FiFilter/>} loading={loading} htmlType={'submit'} type={'primary'}>
                     &nbsp;Filter
                 </Button>

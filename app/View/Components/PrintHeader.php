@@ -26,7 +26,7 @@ class PrintHeader extends Component
      */
     public function render(): View|string|Closure
     {
-        $employee = Pallet::find($this->palletId);
-        return view('components.print-header', compact('employee'));
+        $pallet = Pallet::find($this->palletId);
+        return view('components.print-header', compact('pallet'));
     }
 }

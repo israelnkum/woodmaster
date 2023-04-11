@@ -82,8 +82,8 @@ class WoodController extends Controller
 
     public function getNumber($pallet_log_id, $subLog): int
     {
-        $query = Wood::query()->where('pallet_log_id', $pallet_log_id)->where('sub_log', $subLog)->orderBy('created_at',
-            'desc')->first();
+        $query = Wood::withTrashed()->where('pallet_log_id', $pallet_log_id)
+            ->where('sub_log', $subLog)->orderBy('created_at', 'desc')->first();
 
         if ($query) {
             $number = $query->number + 1;

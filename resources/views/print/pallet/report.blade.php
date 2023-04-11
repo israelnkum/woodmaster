@@ -9,7 +9,7 @@
 @endsection
 @section('print-content')
     @php($total = 0)
-    @foreach($data as $log => $item)
+    @foreach($data['woodResource'] as $log => $item)
         @foreach($item as $subLog => $subLogData)
             @php($totalSquareMeter = 0)
             @foreach($subLogData as $subData)
@@ -27,11 +27,14 @@
             <tr>
                 <td colspan="4" class="py-5">&nbsp;</td>
                 <td class="text-right">Total square meter</td>
-                <td>{{$totalSquareMeter}}</td>
+                <td style="border: solid 1px gray; font-weight: bold;" class="border-2">{{$totalSquareMeter}}</td>
             </tr>
         @endforeach
     @endforeach
     <tr>
-        <td colspan="6">{{$total}}</td>
+        <td colspan="6" style="background: white !important; font-size: 20px; font-weight: bold; text-align: center !important;text-transform: uppercase !important;">
+            <p>total area</p>
+            <p>{{$total}}</p>
+        </td>
     </tr>
 @endsection

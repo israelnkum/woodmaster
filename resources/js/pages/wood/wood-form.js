@@ -1,17 +1,18 @@
 import React, {useEffect, useRef, useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Card, Checkbox, Col, Form, Input, InputNumber, Row} from 'antd'
+import {Button, Card, Checkbox, Col, Form, Input, InputNumber, Row, Space} from 'antd'
 import {connect} from 'react-redux'
 import {handleAddWood, handleUpdateWood} from "../../actions/wood/Action";
 import {TlaError, TlaSuccess} from "../../utils/messages";
 import {FiPrinter} from "react-icons/fi";
+import {RiFileExcel2Line} from "react-icons/ri";
 import {handlePrintPalletReport} from "../../actions/pallet/Action";
 
 function WoodForm(props) {
     const [loading, setLoading] = useState(false)
     const [printing, setPrinting] = useState(false)
     const [form] = Form.useForm();
-    const {addWood, updateWood, printReport, id, palletNumber} = props
+    const {addWood, updateWood, printReport, id, palletNumber, totalWoods} = props
     const lengthInputRef = useRef(null)
     const widthInputRef = useRef(null)
     const sheetsInputRef = useRef(null)
@@ -21,9 +22,9 @@ function WoodForm(props) {
         print_barcode: true
     }
 
-    const startPrinting = () => {
+    const startPrinting = (excel = false) => {
         setPrinting(true)
-        printReport(id, palletNumber).then(() => setPrinting(false))
+        printReport(id, palletNumber, excel).then(() => setPrinting(false))
     }
 
     const submit = (values) => {
@@ -58,11 +59,22 @@ function WoodForm(props) {
     }, []);
 
     return (
-        <Card title={'Add Record'} size={'small'} extra={[
-            <Button
+        <Card title={'ADD RECORD'} size={'small'} extra={[
+            <Space key={'actions'}>
+                <Button
+                    ghost
+                    type={'primary'}
+                    disabled={totalWoods === 0}
                     loading={printing}
-                    onClick={startPrinting}
+                    onClick={() => {startPrinting(true)}}
+                    key={'excel'} icon={<RiFileExcel2Line/>}>Excel</Button>
+                <Button
+                    danger
+                    disabled={totalWoods === 0}
+                    loading={printing}
+                    onClick={() => {startPrinting(false)}}
                     key={'print'} icon={<FiPrinter/>}>Print</Button>
+            </Space>
         ]}>
             <Form form={form} preserve onFinish={submit} initialValues={formValues} layout="vertical">
                 <Row gutter={10}>
@@ -119,7 +131,7 @@ function WoodForm(props) {
                         </Form.Item>
                     </Col>
                     <Col span={4} className={'pt-7'}>
-                        <Form.Item name="print_barcode" valuePropName="checked" >
+                        <Form.Item name="print_barcode" valuePropName="checked">
                             <Checkbox>Print Barcode</Checkbox>
                         </Form.Item>
                         <Form.Item hidden name="id" label="ID"
@@ -141,15 +153,19 @@ function WoodForm(props) {
 WoodForm.propTypes = {
     addWood: PropTypes.func.isRequired,
     id: PropTypes.any.isRequired,
+    totalWoods: PropTypes.number.isRequired,
     palletNumber: PropTypes.any.isRequired,
     printReport: PropTypes.func.isRequired,
     updateWood: PropTypes.func.isRequired
 }
 
+const mapStateToProps = (state) => ({
+    totalWoods: state.woodReducer.woods.data.length,
+})
 const mapDispatchToProps = (dispatch) => ({
     addWood: (payload) => dispatch(handleAddWood(payload)),
     updateWood: (payload) => dispatch(handleUpdateWood(payload)),
-    printReport: (id, palletNumber) => dispatch(handlePrintPalletReport(id, palletNumber))
+    printReport: (id, palletNumber, excel) => dispatch(handlePrintPalletReport(id, palletNumber, excel))
 })
 
-export default connect(null, mapDispatchToProps)(WoodForm)
+export default connect(mapStateToProps, mapDispatchToProps)(WoodForm)

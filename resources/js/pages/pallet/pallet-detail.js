@@ -43,11 +43,12 @@ function PalletDetail(props) {
                     </Col>
                     <Col span={6} xs={24} sm={24} md={6}>
                         <Card>
-                            <Tabs items={[
+                            <Tabs destroyInactiveTabPane={true} items={[
                                 {
                                     key: 'detail',
                                     label: 'Pallet Info',
-                                    children: <PalletInfo pallet={pallet} palletLogs={palletLogs} loading={loading}/>
+                                    children: <PalletInfo pallet={pallet} palletLogs={palletLogs} loading={loading}/>,
+                                    forceRender: true
                                 },
                                 {
                                     key: 'pallet-info',
