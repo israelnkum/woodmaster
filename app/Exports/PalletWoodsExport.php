@@ -5,7 +5,7 @@ namespace App\Exports;
 use App\Models\Pallet;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithEvents;
@@ -13,19 +13,24 @@ use Maatwebsite\Excel\Concerns\WithHeadings;
 use Maatwebsite\Excel\Concerns\WithMapping;
 use Maatwebsite\Excel\Concerns\WithPreCalculateFormulas;
 use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Events\BeforeExport;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Border;
 
 class PalletWoodsExport implements FromCollection, WithHeadings,
     WithMapping, ShouldAutoSize, WithPreCalculateFormulas, WithEvents
 {
+    use Exportable;
+
     private Collection $data;
 
     private Pallet $pallet;
 
     private int $totalRows = 5;
+
     private int $end = 4;
-    private int $start = 4;
+
+    private array $totalCells;
 
     /**
      * @param $woodResource
@@ -53,26 +58,26 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
         $headers = [];
 
         $headers[] = [
-            'SEPARATE MEASUREMENT'
+            'DISTINTAN MISURAZIONE'
         ];
         $headers[] = [
-            'Pallet Number: ' . $this->pallet->pallet_number . '                              THICKNESS: ' . $this->pallet->thickness
+            'Pedana: ' . $this->pallet->pallet_number . 'Cliete' . $this->pallet->thickness
         ];
         $headers[] = [
-            'SPECIES: ' . $this->pallet->species->name . '                                         '
-        ];
-
-        $headers[] = [
-            'QUALITY: ' . $this->pallet->quality->name . '                              DATE: ' . Carbon::parse($this->pallet->created_at)->format('m d Y')
+            'Essenza: ' . $this->pallet->species->name . '                                         '
         ];
 
         $headers[] = [
-            'Log/Sub Log',
-            'Number',
-            'Sheets',
-            'Length (cm)',
-            'Width (cm)',
-            'Square Meter(mq)'
+            'Classifica: ' . $this->pallet->quality->name . '                              Riferimento: ' . Carbon::parse($this->pallet->created_at)->format('m d Y')
+        ];
+
+        $headers[] = [
+            'Tronco/Biglia',
+            'Numbero Pacco',
+            'Numbero Fogli',
+            'Lunghezza(cm)',
+            'Larghezza (cm)',
+            'Superficie (mq)'
         ];
 
         return $headers;
@@ -87,6 +92,8 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
         $rows = [];
 
         foreach ($row as $woods) {
+
+            $counter = $this->end + 2;
             foreach ($woods as $subLog) {
                 $rows [] = [
                     $subLog->palletLog->log_number . '/' . $subLog->sub_log,
@@ -94,17 +101,27 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
                     $subLog->sheets,
                     $subLog->length,
                     $subLog->width,
-                    $subLog->square_meter
+//                    $subLog->square_meter
+                    '=ROUND((C' . $counter . '*D' . $counter . '*E' . $counter . ')/10000, 2)'
                 ];
 
+                $counter++;
                 ++$this->totalRows;
             }
 
-            $this->start = $this->end + 2;
-
+            $start = $this->end + 2;
             $this->end += count($woods) + 1;
 
-            $rows[] = ['', '', '', '', 'Total Square Meter', '=SUM(F' . $this->start . ':F' . $this->end . ')'];
+            $this->totalCells[] = 'F' . $this->end + 1;
+
+            $rows[] = [
+                '',
+                '',
+                '',
+                '',
+                'Superficie Totale Biglia',
+                '=ROUND(SUM(F' . $start . ':F' . $this->end . '), 2)'
+            ];
 
             ++$this->totalRows;
         }
@@ -116,6 +133,9 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
     {
         $columns = ['A', 'B', 'C', 'D', 'E', 'F'];
         return [
+            BeforeExport::class => function (BeforeExport $event) {
+                $event->writer->getProperties()->setCreator('TechLineAfrica');
+            },
             AfterSheet::class => function (AfterSheet $event) use ($columns) {
                 // merge cells
                 for ($i = 1; $i < 5; $i++) {
@@ -123,7 +143,7 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
                 }
 
                 foreach ($columns as $column) {
-                    $event->sheet->getStyle('A1:' . $column . $this->totalRows)->applyFromArray([
+                    $event->sheet->getStyle('A1:' . $column . $this->totalRows + 2)->applyFromArray([
                         'borders' => [
                             'right' => [
                                 'borderStyle' => Border::BORDER_THIN,
@@ -137,7 +157,7 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
                     ]);
                 }
 
-                for ($i = 1; $i < $this->totalRows; $i++) {
+                for ($i = 1; $i < $this->totalRows + 3; $i++) {
                     $event->sheet->getStyle('A1:F' . $i)->applyFromArray([
                         'borders' => [
                             'bottom' => [
@@ -169,6 +189,10 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
                         ]
                     ]);
                 }
+
+                $highestRow = ($event->sheet->getHighestRow());
+                $event->sheet->setCellValue('E' . $highestRow, 'Superficie Totale')
+                    ->setCellValue('F' . $highestRow, '=ROUND(SUM(' . implode(',', $this->totalCells) . '), 2)');
             }
         ];
     }
