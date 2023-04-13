@@ -26,6 +26,9 @@ class Wood extends Model
         'user_id'
     ];
 
+    protected $casts = [
+      'square_meter' => 'float'
+    ];
     /**
      * @return BelongsTo
      */

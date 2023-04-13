@@ -10813,6 +10813,12 @@ button,
 .min-w-\[150px\]{
   min-width: 150px;
 }
+.min-w-\[250px\]{
+  min-width: 250px;
+}
+.min-w-\[350px\]{
+  min-width: 350px;
+}
 .max-w-6xl{
   max-width: 72rem;
 }
@@ -10833,6 +10839,9 @@ button,
 }
 .grid-cols-1{
   grid-template-columns: repeat(1, minmax(0, 1fr));
+}
+.flex-wrap{
+  flex-wrap: wrap;
 }
 .items-center{
   align-items: center;

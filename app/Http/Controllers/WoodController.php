@@ -6,10 +6,12 @@ use App\Helpers\Barcode;
 use App\Http\Requests\StoreWoodRequest;
 use App\Http\Requests\UpdateWoodRequest;
 use App\Http\Resources\WoodResource;
+use App\Models\Pallet;
 use App\Models\Wood;
 use App\Models\PalletLog;
 use Exception;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -122,6 +124,30 @@ class WoodController extends Controller
 
             return response()->json([
                 'message' => 'Something went wrong'
+            ], 400);
+        }
+    }
+
+    public function moveWoods(Request $request)
+    {
+        DB::beginTransaction();
+
+        try {
+
+            $palletLog = PalletLog::findOrFail($request->pallet_log_id);
+
+            $palletLog->update([
+                'pallet_id' => $request->pallet_id
+            ]);
+
+            DB::commit();
+            return response()->json('success');
+        } catch (Exception $exception) {
+            DB::rollBack();
+            Log::error('Add Wood ', [$exception]);
+
+            return response()->json([
+                'message' => "Something went wrong"
             ], 400);
         }
     }

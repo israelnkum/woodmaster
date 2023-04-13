@@ -80,7 +80,7 @@ export const handleGetPalletLogs = (id) => (dispatch) => {
 
 export const handleGetPalletSubLogs = (id) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().get(`/pallet/${id}/sub-logs`).then((res) => {
+        api().get(`/pallet-log/${id}/sub-logs`).then((res) => {
             dispatch(getPalletSubLogs(res.data))
             resolve(res)
         }).catch((err) => {

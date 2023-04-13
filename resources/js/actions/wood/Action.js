@@ -18,7 +18,7 @@ export const handleAddWood = (data) => (dispatch) => {
 }
 export const handleMoveWood = (data) => (dispatch) => {
     return new Promise((resolve, reject) => {
-        api().post('/wood/move', data).then((res) => {
+        api().post('/woods/move', data).then((res) => {
             dispatch(moveWood(res.data))
             resolve(res)
         }).catch((err) => {

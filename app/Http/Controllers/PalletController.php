@@ -11,6 +11,7 @@ use App\Http\Resources\PalletResource;
 use App\Http\Resources\WoodResource;
 use App\Models\Pallet;
 use App\Models\PalletLog;
+use App\Models\Wood;
 use App\Traits\HasPrint;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
@@ -86,10 +87,11 @@ class PalletController extends Controller
         return WoodResource::collection($pal->woods()->paginate(100));
     }
 
-    public function getPalletSubLogs($palletId)
+    public function getPalletSubLogs($palletLogId): JsonResponse
     {
-        $pal = Pallet::findOrFail($palletId);
-        return response()->json($pal->woods()->distinct('sub_log')->pluck('sub_log'));
+        $pal = Wood::query()->where('pallet_log_id', $palletLogId)->distinct('sub_log')->pluck('sub_log');
+
+        return response()->json($pal);
     }
 
     /**

@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 
 function Dashboard({ counts }) {
     return (
-        <div className={'mt-1.5 w-full flex gap-2'}>
+        <div className={'mt-1.5 flex-wrap flex gap-2'}>
             <Widget title={'Total Pallets'} value={counts?.pallets}/>
             <Widget title={'Total Species'} value={counts?.species}/>
             <Widget title={'Total Qualities'} value={counts?.qualities}/>

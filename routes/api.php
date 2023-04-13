@@ -31,9 +31,10 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::resource('/users', UserController::class);
     Route::get('/pallet/woods', [PalletController::class, 'getPalletWood']);
     Route::get('/pallet/{id}/logs', [PalletController::class, 'getPalletLogs']);
-    Route::get('/pallet/{id}/sub-logs', [PalletController::class, 'getPalletSubLogs']);
+    Route::get('/pallet-log/{id}/sub-logs', [PalletController::class, 'getPalletSubLogs']);
     Route::apiResource('/pallets', PalletController::class);
     Route::post('/wood/{id}/barcode', [WoodController::class, 'printBarcode']);
+    Route::post('/woods/move', [WoodController::class, 'moveWoods']);
     Route::apiResource('/wood', WoodController::class);
 
     Route::get('/pallet/{id}/report', [PalletController::class, 'getPalletReport']);
