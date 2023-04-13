@@ -10,11 +10,12 @@ import {handleGetPalletWood} from "../../actions/pallet/Action";
 import {useParams} from "react-router";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
+import TlaAddNew from "../../commons/tla-add-new";
 
 const {Column} = Table
 
 function WoodTable(props) {
-    const {wood, getWood, deleteWood, filter, printBarCode} = props
+    const {wood, getWood, deleteWood, filter, printBarCode, squareMeter} = props
 
     const {id} = useParams()
     return (
@@ -24,12 +25,14 @@ function WoodTable(props) {
                              callbackFunction={getWood}
                              data={wood?.data}
                              meta={wood?.meta}
-                             /*extra={
-                                 <TlaAddNew link={`/app/pallet/${id}/woods/move`}>
-                                     <Button>Move</Button>
-                                 </TlaAddNew>
-                             }*/
-            >
+                             extra={
+                                 <Space>
+                                     <p>Square Meter: {squareMeter.toFixed(2)}</p>
+                                     <TlaAddNew link={`/app/pallet/${id}/woods/move`}>
+                                         <Button>Move</Button>
+                                     </TlaAddNew>
+                                 </Space>
+                             }>
                 <Column title="number" dataIndex={'number'}/>
                 <Column title="log" dataIndex={'log'}/>
                 <Column title="sub log" dataIndex={'sub_log'}/>
@@ -54,16 +57,24 @@ function WoodTable(props) {
     )
 }
 
+WoodTable.defaultProps = {
+    squareMeter: 0
+}
+
 WoodTable.propTypes = {
     deleteWood: PropTypes.func,
     wood: PropTypes.object,
     filter: PropTypes.object,
     getWood: PropTypes.func,
     printBarCode: PropTypes.func,
+    squareMeter: PropTypes.number,
 }
 
 const mapStateToProps = (state) => ({
     filter: state.woodReducer.filter,
+    squareMeter: state.woodReducer.woods?.data.reduce((accumulator, object) => {
+        return accumulator + object.square_meter;
+    }, 0),
 })
 
 const mapDispatchToProps = (dispatch) => ({
