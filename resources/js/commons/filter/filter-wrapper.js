@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import {Button, Card, Form, Input} from "antd";
 import {FiFilter, FiPrinter} from "react-icons/fi";
 
-function FilterWrapper (props) {
-    const { submitFilter, exportFilter, children, initialValue } = props
+function FilterWrapper(props) {
+    const {submitFilter, exportFilter, children, initialValue} = props
     const [loading, setLoading] = useState(false)
     const [form] = Form.useForm()
 
@@ -12,12 +12,14 @@ function FilterWrapper (props) {
         setLoading(true)
         values.export = false
         values.print = false
-        submitFilter(new URLSearchParams(values)).then(() =>  setLoading(false))
+        submitFilter(new URLSearchParams(values))
+            .then(() => setLoading(false))
+            .catch(() => setLoading(false))
     }
 
     const completeExport = (values) => {
         setLoading(true)
-        exportFilter(new URLSearchParams(values)).then(() =>  setLoading(false))
+        exportFilter(new URLSearchParams(values)).then(() => setLoading(false))
     }
 
     const FilterTitle = () => (
@@ -37,7 +39,7 @@ function FilterWrapper (props) {
         </div>
     )
     return (
-        <Form form={form} onFinish={onFinish} layout={'vertical'} initialValues={{ ...initialValue, export: false}}>
+        <Form form={form} onFinish={onFinish} layout={'vertical'} initialValues={{...initialValue, export: false}}>
             <Card title={'Filter'} size={'small'} extra={[
                 <Button key={'filter'} icon={<FiFilter/>} loading={loading} htmlType={'submit'} type={'primary'}>
                     &nbsp;Filter

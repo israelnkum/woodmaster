@@ -69,3 +69,10 @@ export const getPalletStats = (payload) => {
         payload: payload
     }
 }
+
+export const updateSquareMeter = (payload) => {
+    return {
+        type: Types.UPDATE_SQUARE_METER,
+        payload: payload
+    }
+}

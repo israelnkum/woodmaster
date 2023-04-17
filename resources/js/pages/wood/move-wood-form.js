@@ -30,34 +30,45 @@ function MoveWoodForm(props) {
             width={520}
             initialValues={formValues}
             onSubmit={moveWood}
-            formTitle={`Move Wood`}>
+            formTitle={`Move Wood(s)`}>
             <Spin spinning={loadingSubLogs}>
                 <Row gutter={10}>
-                    <Col span={8}>
-                        <TlaSelect onChange={(value) => {
-                            setLoadingSubLogs(true)
-                            getPalletSubLogs(value).then(() => {
-                                form.resetFields(['sub_log'])
-                                setDisabled(false)
-                                setLoadingSubLogs(false)
-                            })
-                        }}
-                                   label={'Log'}
-                                   name={'pallet_log_id'}
-                                   required options={palletLogs}
-                                   optionKey={'log_number'}/>
-                    </Col>
-                    {/*<Col span={8}>
-                        <TlaSelect
-                            disabled={disabled}
-                            hasAll
-                            label={'Sub Log'}
-                            name={'sub_log'}
-                            required options={palletSubLogs}
-                            optionKey={'self'}/>
-                    </Col>*/}
+                    {
+                        state.data.sub_logs.length === 0 ?
+                            <>
+                                <Col span={8}>
+                                    <TlaSelect onChange={(value) => {
+                                        setLoadingSubLogs(true)
+                                        getPalletSubLogs(value).then((res) => {
+                                            form.resetFields(['sub_log'])
+                                            setDisabled(res.data.length === 0)
+                                            setLoadingSubLogs(false)
+                                        })
+                                    }}
+                                               label={'Log'}
+                                               name={'pallet_log_id'}
+                                               required options={palletLogs}
+                                               optionKey={'log_number'}/>
+                                </Col>
+                                <Col span={8}>
+                                    <TlaSelect
+                                        disabled={disabled}
+                                        hasAll
+                                        label={'Sub Log'}
+                                        name={'sub_log'}
+                                        required options={palletSubLogs}
+                                        optionKey={'self'}/>
+                                </Col>
+                            </> :
+                            <Col span={8} className={'flex items-center'}>
+                                <p>Move <b>{state.data.sub_logs.length}</b> wood(s) to which pallet?</p>
+                            </Col>
+                    }
                     <Col span={8}>
                         <Form.Item hidden name={'id'}>
+                            <Input/>
+                        </Form.Item>
+                        <Form.Item hidden name={'sub_logs'}>
                             <Input/>
                         </Form.Item>
                         <TlaSelect

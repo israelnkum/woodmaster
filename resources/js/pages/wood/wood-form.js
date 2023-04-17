@@ -39,8 +39,9 @@ function WoodForm(props) {
 
         formData.append('pallet_log_id', localStorage.getItem('palletLogId'));
         formData.append('sub_log', localStorage.getItem('subLog'));
-        (values.id === 0 ? addWood : updateWood)(formData).then(() => {
-            // form.resetFields()
+        (values.id === 0 ? addWood : updateWood)(formData).then((res) => {
+            const squareMeter = localStorage.getItem('totalSquareMeter') ?? 0
+            localStorage.setItem('totalSquareMeter', parseFloat(squareMeter) + res.data.square_meter)
             setLoading(false)
             lengthInputRef.current.focus({cursor: 'all'})
             TlaSuccess();
@@ -160,7 +161,7 @@ WoodForm.propTypes = {
 }
 
 const mapStateToProps = (state) => ({
-    totalWoods: state.woodReducer.woods.data.length,
+    totalWoods: state.woodReducer.woods.data.length
 })
 const mapDispatchToProps = (dispatch) => ({
     addWood: (payload) => dispatch(handleAddWood(payload)),

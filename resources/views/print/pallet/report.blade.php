@@ -33,7 +33,7 @@
     @endforeach
     <tr>
         <td colspan="6" style="background: white !important; font-size: 20px; font-weight: bold; text-align: center !important;text-transform: uppercase !important;">
-            <p>total area</p>
+            <p>Superficie Totale</p>
             <p>{{$total}}</p>
         </td>
     </tr>

@@ -1,11 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Pagination from 'react-js-pagination'
-import { Card, Typography } from 'antd'
-import { FiArrowLeft, FiArrowRight } from 'react-icons/fi'
+import {Typography} from 'antd'
+import {FiArrowLeft, FiArrowRight} from 'react-icons/fi'
 
 function TlaPagination (props) {
-    const { meta, loadData, children, showHeader, extra } = props
+    const { meta, loadData, children, showHeader, extra, rowSelectionActions } = props
 
     return (
         <div>
@@ -15,7 +15,7 @@ function TlaPagination (props) {
                     <Typography.Text>
                         {meta.from} - {meta.to} of {meta.total}
                     </Typography.Text>
-
+                    {rowSelectionActions}
                     {extra}
                 </div>
             }
@@ -54,6 +54,7 @@ TlaPagination.propTypes = {
     children: PropTypes.node,
     loadData: PropTypes.func.isRequired,
     showHeader: PropTypes.bool,
+    rowSelectionActions: PropTypes.any,
     extra: PropTypes.any,
 }
 

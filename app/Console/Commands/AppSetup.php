@@ -33,8 +33,8 @@ class AppSetup extends Command
         try {
             $this->output->title('Application Setup Started');
 
-            Artisan::call('migrate:fresh');
-            Artisan::call('db:seed');
+//            Artisan::call('migrate:fresh');
+//            Artisan::call('db:seed');
 
             $this->output->success('Setup Complete');
 

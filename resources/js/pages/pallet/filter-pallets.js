@@ -24,16 +24,16 @@ function FilterPallets(props) {
                         <Input size={'large'}/>
                     </Form.Item>
                 </Col>
-                {/*<Col span={3} xs={24} sm={24} md={3} lg={3} xl={3}>*/}
-                {/*    <TlaSelect hasAll name={'log_number'} optionKey={'self'} options={logNumbers} label={'Log Number'}/>*/}
-                {/*</Col>*/}
+                <Col span={3} xs={24} sm={24} md={3} lg={3} xl={3}>
+                    <TlaSelect hasAll name={'log_number'} optionKey={'self'} options={logNumbers} label={'Log Number'}/>
+                </Col>
                 <Col span={6} xs={24} sm={24} md={6} lg={6} xl={6}>
                     <TlaSelect hasAll name={'species_id'} optionKey={'name'} options={species} label={'species'}/>
                 </Col>
-                <Col span={6} xs={24} sm={24} md={6} lg={6} xl={6}>
+                <Col span={4} xs={24} sm={24} md={4} lg={4} xl={4}>
                     <TlaSelect hasAll name={'quality_id'} optionKey={'name'} options={qualities} label={'qualities'}/>
                 </Col>
-                <Col span={6} xs={24} sm={24} md={6} lg={6} xl={6}>
+                <Col span={4} xs={24} sm={24} md={4} lg={4} xl={4}>
                     <TlaSelect hasAll name={'thickness'} optionKey={'name'} options={thicknesses} label={'thickness'}/>
                 </Col>
             </Row>
