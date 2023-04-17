@@ -29,6 +29,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     });
 
     Route::resource('/users', UserController::class);
+    Route::get('/pallet/search/{query}', [PalletController::class, 'searchPallets']);
     Route::get('/pallet/woods', [PalletController::class, 'getPalletWood']);
     Route::get('/pallet/{id}/logs', [PalletController::class, 'getPalletLogs']);
     Route::get('/pallet-log/{id}/sub-logs', [PalletController::class, 'getPalletSubLogs']);

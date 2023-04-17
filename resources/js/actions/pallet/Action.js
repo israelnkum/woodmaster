@@ -1,7 +1,7 @@
 import api from '../../utils/api'
 import {
     addFilter,
-    addPallet,
+    addPallet, applySearch,
     getPallet,
     getPalletLogs,
     getPallets,
@@ -145,6 +145,17 @@ export const handlePrintPalletReport = (id, palletNumber, excel = true) => async
                 completeExport(res.data, `pallet-${palletNumber}`)
                 resolve()
             }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleSearchPallets = (query) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/search/${query}`).then((res) => {
+            dispatch(applySearch(res.data))
+            resolve(res)
+        }).catch((err) => {
             reject(err)
         })
     })
