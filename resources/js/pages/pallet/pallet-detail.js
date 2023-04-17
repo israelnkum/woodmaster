@@ -23,7 +23,8 @@ function PalletDetail(props) {
     useEffect(() => {
         setPageInfo(pageData)
 
-        getPallet(id).then(() => {
+        getPallet(id).then((res) => {
+            localStorage.setItem('totalSquareMeter', res.data.square_meter)
             setLoading(false)
         })
 

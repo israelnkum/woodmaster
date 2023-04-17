@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <title>{{ config('app.name', 'Inventory') }}</title>
+    <title>{{ config('app.name', 'WoodMaster') }}</title>
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <style>
         table {
-            font-family: 'Arial', sans-serif;
+            font-family: TimesNewRoman, serif;
             width: 100%;
             margin-bottom: 1rem;
             color: #000;
@@ -42,11 +42,11 @@
 </head>
 <body>
 <div>
-        <x-print-header :pallet-id="$data['palletId']"/>
+    <x-print-header :pallet-id="$data['palletId']"/>
 </div>
-<table border="0">
-    <thead align="left">
-    <tr align="left">
+<table>
+    <thead>
+    <tr>
         @yield('headers')
     </tr>
     </thead>

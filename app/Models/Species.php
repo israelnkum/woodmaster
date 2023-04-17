@@ -8,4 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class Species extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+     'id' => 'integer'
+    ];
 }

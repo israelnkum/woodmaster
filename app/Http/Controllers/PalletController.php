@@ -2,11 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Exports\EmployeeExport;
 use App\Exports\PalletWoodsExport;
 use App\Http\Requests\StorePalletRequest;
 use App\Http\Requests\UpdatePalletRequest;
-use App\Http\Resources\EmployeeResource;
 use App\Http\Resources\PalletResource;
 use App\Http\Resources\WoodResource;
 use App\Models\Pallet;
@@ -60,10 +58,12 @@ class PalletController extends Controller
             return $q->where('pallet_number', 'like', '%' . $request->pallet_number . '%');
         });
 
-//        $pallets->when($request->has('log_number') &&
-//            $request->log_number !== 'all', function ($q) use ($request) {
-//            return $q->logs()->where('log_number', $request->log_number);
-//        });
+        $pallets->when($request->has('log_number') &&
+            $request->log_number !== 'all', function ($q) use ($request) {
+            return $q->whereHas('logs', function ($query) use ($request) {
+                $query->where('log_number', $request->log_number);
+            });
+        });
 
         return PalletResource::collection($pallets->paginate(10));
     }
@@ -125,7 +125,6 @@ class PalletController extends Controller
             'woodResource' => $woodResource
         ], 'Pallet-' . $pallet->pallet_number);
     }
-
 
     /**
      * @param $palletId
@@ -199,7 +198,6 @@ class PalletController extends Controller
                     'log_number' => $request->log,
                     'user_id' => Auth::id()
                 ]);
-
             }
 
             DB::commit();

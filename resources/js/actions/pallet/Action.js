@@ -5,7 +5,8 @@ import {
     getPallet,
     getPalletLogs,
     getPallets,
-    getPalletStats, getPalletSubLogs,
+    getPalletStats,
+    getPalletSubLogs,
     removePallet,
     updatePallet,
 } from './ActionCreators'
@@ -36,6 +37,8 @@ export const handleGetAllPallets = (params) => (dispatch) => {
     return new Promise((resolve, reject) => {
         api().get(`/pallets?${params}`).then((res) => {
             dispatch(getPallets(res.data))
+            params?.delete('page')
+            params && dispatch(addFilter(Object.fromEntries(params)))
             resolve(res)
         }).catch((err) => {
             reject(err)
@@ -134,7 +137,6 @@ export const handleDeletePallet = (id) => (dispatch) => {
         })
     })
 }
-
 
 export const handlePrintPalletReport = (id, palletNumber, excel = true) => async () => {
     return new Promise((resolve, reject) => {

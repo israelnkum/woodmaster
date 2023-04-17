@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useState} from 'react'
 import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
@@ -11,28 +11,42 @@ import {useParams} from "react-router";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import TlaAddNew from "../../commons/tla-add-new";
+import TotalSquareMeter from "../pallet/total-square-meter";
 
 const {Column} = Table
 
 function WoodTable(props) {
-    const {wood, getWood, deleteWood, filter, printBarCode, squareMeter} = props
-
+    const {wood, getWood, deleteWood, filter, printBarCode} = props
+    const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const {id} = useParams()
+
     return (
         <div className={'pb-10'}>
-            {/*<FilterWood/>*/}
-            <TlaTableWrapper filterObj={{...filter, palletId: id}}
-                             callbackFunction={getWood}
-                             data={wood?.data}
-                             meta={wood?.meta}
-                             extra={
-                                 <Space>
-                                     <p>Square Meter: {squareMeter.toFixed(2)}</p>
-                                     <TlaAddNew link={`/app/pallet/${id}/woods/move`}>
-                                         <Button>Move</Button>
-                                     </TlaAddNew>
-                                 </Space>
-                             }>
+            <TlaTableWrapper
+                hasSelection
+                filterObj={{...filter, palletId: id}}
+                callbackFunction={getWood}
+                data={wood?.data}
+                meta={wood?.meta}
+                setSelectedRows={setSelectedRowKeys}
+                rowSelectionActions={
+                    selectedRowKeys.length > 0 ?
+                        <Space>
+                            {/*<Button danger>Delete</Button>*/}
+                            <TlaAddNew data={{ sub_logs: selectedRowKeys }} link={`/app/pallet/${id}/woods/move`}>
+                                <Button>Move</Button>
+                            </TlaAddNew>
+                        </Space> : <></>
+                }
+                extra={
+                    <Space>
+                        <TotalSquareMeter/>
+                        <TlaAddNew data={{ sub_logs: [] }} link={`/app/pallet/${id}/woods/move`}>
+                            <Button>Move</Button>
+                        </TlaAddNew>
+                    </Space>
+                }>
+                <Column className={'hidden'} title="id" dataIndex={'id'}/>
                 <Column title="number" dataIndex={'number'}/>
                 <Column title="log" dataIndex={'log'}/>
                 <Column title="sub log" dataIndex={'sub_log'}/>
@@ -57,24 +71,16 @@ function WoodTable(props) {
     )
 }
 
-WoodTable.defaultProps = {
-    squareMeter: 0
-}
-
 WoodTable.propTypes = {
     deleteWood: PropTypes.func,
     wood: PropTypes.object,
     filter: PropTypes.object,
     getWood: PropTypes.func,
-    printBarCode: PropTypes.func,
-    squareMeter: PropTypes.number,
+    printBarCode: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
-    filter: state.woodReducer.filter,
-    squareMeter: state.woodReducer.woods?.data.reduce((accumulator, object) => {
-        return accumulator + object.square_meter;
-    }, 0),
+    filter: state.woodReducer.filter
 })
 
 const mapDispatchToProps = (dispatch) => ({

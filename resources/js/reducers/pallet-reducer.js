@@ -1,4 +1,5 @@
-import { Types } from '../actions/pallet/Types'
+import {Types} from '../actions/pallet/Types'
+
 const initialState = {
     pallets: {
         data: [],
@@ -17,22 +18,28 @@ const initialState = {
     palletSubLogs: [],
 }
 
-export default function palletReducer (state = initialState, action) {
+export default function palletReducer(state = initialState, action) {
     switch (action.type) {
         case Types.GET_PALLETS:
-            return { ...state, pallets: action.payload }
+            return {...state, pallets: action.payload}
 
         case Types.GET_PALLET:
-            return { ...state, pallet: action.payload }
+            return {...state, pallet: action.payload}
+
+        case Types.ADD_PALLET_FILTER:
+            return {...state, filter: action.payload}
+
+        case Types.UPDATE_SQUARE_METER:
+            return {...state, pallet: {...state.pallet, square_meter: state.pallet.square_meter + action.payload}}
 
         case Types.GET_PALLET_LOGS:
-            return { ...state, palletLogs: action.payload }
+            return {...state, palletLogs: action.payload}
 
         case Types.GET_PALLET_SUB_LOGS:
-            return { ...state, palletSubLogs: action.payload }
+            return {...state, palletSubLogs: action.payload}
 
         case Types.GET_PALLET_STATS:
-            return { ...state, palletStats: action.payload }
+            return {...state, palletStats: action.payload}
 
         case Types.ADD_PALLET:
             return {
@@ -58,7 +65,7 @@ export default function palletReducer (state = initialState, action) {
         case Types.REMOVE_PALLET:
             return {
                 ...state,
-                pallets: { ...state.pallets, data: state.pallets.data.filter((pallet) => pallet.id !== action.id) }
+                pallets: {...state.pallets, data: state.pallets.data.filter((pallet) => pallet.id !== action.id)}
             }
 
         default:

@@ -26,7 +26,7 @@ class WoodResource extends JsonResource
             'sheets' => $this->sheets,
             'square_meter' => $this->square_meter,
             'pallet_log_id' => $this->pallet_log_id,
-            'deleted_at' => $this->deleted_at,
+            'deleted_at' => $this->deleted_at
         ];
     }
 }

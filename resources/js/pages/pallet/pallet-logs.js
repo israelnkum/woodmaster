@@ -13,9 +13,11 @@ function PalletLogs(props) {
     useEffect(() => {
         setLoading(true)
         getPalletLogs(id).then((res) => {
-            const {id, log_number} = res.data[res.data.length - 1]
-            localStorage.setItem('palletLogNumber', log_number)
-            localStorage.setItem('palletLogId', id)
+            if (res.data.length) {
+                const {id, log_number} = res.data[res.data.length - 1]
+                localStorage.setItem('palletLogNumber', log_number)
+                localStorage.setItem('palletLogId', id)
+            }
             setLoading(false)
         })
     }, [localStorage.getItem('palletLogId')])
@@ -25,7 +27,7 @@ function PalletLogs(props) {
             <p className={'uppercase'}>Log</p>
             <Spin spinning={loading}>
                 {
-                    !loading &&
+                    (!loading && palletLogs.length > 0) &&
                     <Select onChange={(value, option) => {
                         localStorage.setItem('palletLogNumber', option.children)
                         localStorage.setItem('palletLogId', value)

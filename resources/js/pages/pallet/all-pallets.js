@@ -46,14 +46,19 @@ function AllPallets(props) {
                     <Column className={'cursor-pointer'} onCell={Details} title="thickness" dataIndex={'thickness'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="quality" dataIndex={'quality'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="species" dataIndex={'species'}/>
-                    <Column className={'cursor-pointer'} onCell={Details} title="date created" dataIndex={'date_created'}/>
-                    <Column className={'cursor-pointer'} onCell={Details} title="square meter" dataIndex={'square_meter'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="date created"
+                            dataIndex={'date_created'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="square meter"
+                            dataIndex={'square_meter'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="logs" dataIndex={'logs_count'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="woods" dataIndex={'wood_count'}/>
                     <Column className={'cursor-pointer'} title="Action" render={(value) => (
                         <Space>
                             <TlaEdit icon
-                                     data={{...value, log: value?.pallet_logs[value.pallet_logs.length - 1].log_number}}
+                                     data={{
+                                         ...value,
+                                         log: value?.pallet_logs.length > 0 ? value?.pallet_logs[value.pallet_logs.length - 1].log_number : ''
+                                     }}
                                      link={'form'} type={'text'}/>
                             <TlaConfirm title={'Pallet'} callBack={() => {
                                 deletePallet(value.id).then(() => TlaSuccess('Pallet Deleted'))

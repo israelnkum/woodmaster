@@ -128,28 +128,59 @@ class WoodController extends Controller
         }
     }
 
-    public function moveWoods(Request $request)
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function moveWoods(Request $request): JsonResponse
     {
         DB::beginTransaction();
 
         try {
-
-            $palletLog = PalletLog::findOrFail($request->pallet_log_id);
-
-            $palletLog->update([
-                'pallet_id' => $request->pallet_id
-            ]);
+            if ($request->sub_logs == null) {
+                $palletLog = PalletLog::findOrFail($request->pallet_log_id);
+                $newPalletLog = $this->checkLog($request->pallet_id, $palletLog->log_number);
+                if ($request->sub_log === "all") {
+                    $palletLog->woods()->update(['pallet_log_id' => $newPalletLog->id]);
+                } else {
+                    $this->updateWood($request->sub_log, $request->pallet_log_id, $newPalletLog->id);
+                }
+            } else {
+                Log::info('not null here');
+            }
 
             DB::commit();
+
             return response()->json('success');
         } catch (Exception $exception) {
             DB::rollBack();
-            Log::error('Add Wood ', [$exception]);
+            Log::error('Move Wood ', [$exception]);
 
             return response()->json([
                 'message' => "Something went wrong"
             ], 400);
         }
+    }
+
+    /**
+     * @param $palletId
+     * @param $logNumber
+     * @return PalletLog
+     */
+    public function checkLog($palletId, $logNumber): PalletLog
+    {
+        $pallet = Pallet::findOrFail($palletId);
+
+        if (!$pallet->logs->pluck('log_number')->contains($logNumber)) {
+            $newPalletLog = $pallet->logs()->create([
+                'log_number' => $logNumber,
+                'user_id' => Auth::id()
+            ]);
+        } else {
+            $newPalletLog = PalletLog::where('pallet_id', $pallet->id)->where('log_number', $logNumber)->first();
+        }
+
+        return $newPalletLog;
     }
 
     /**
@@ -178,6 +209,28 @@ class WoodController extends Controller
                 'message' => "Something went wrong"
             ], 400);
         }
+    }
+//    public function moveSubLog(int $palletId, $logNumber, $subLog){
+//        $pallet = Pallet::findOrFail($palletId);
+//
+//        if (!$pallet->logs->pluck('log_number')->contains($logNumber)) {
+//            $newPalletLog = $pallet->logs()->create([
+//                'log_number' => $logNumber,
+//                'user_id' => Auth::id()
+//            ]);
+//        } else {
+//            $newPalletLog = PalletLog::where('pallet_id', $pallet->id)->where('log_number', $logNumber)->first();
+//        }
+//
+//        Wood::query()->where('sub_log', $subLog)->where('pallet_log_id', $request->pallet_log_id)
+//            ->update(['pallet_log_id' => $newPalletLog->id]);
+//    }
+
+    public function updateWood($subLog, $palletLogId, $newPalletLogId): void
+    {
+        Wood::query()->where('sub_log', $subLog)
+            ->where('pallet_log_id', $palletLogId)
+            ->update(['pallet_log_id' => $newPalletLogId]);
     }
 
     /**
