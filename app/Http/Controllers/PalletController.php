@@ -65,7 +65,7 @@ class PalletController extends Controller
             });
         });
 
-        return PalletResource::collection($pallets->paginate(10));
+        return PalletResource::collection($pallets->orderBy('pallet_number')->paginate(200));
     }
 
     /**
@@ -237,5 +237,14 @@ class PalletController extends Controller
                 'message' => 'Something went wrong'
             ], 400);
         }
+    }
+
+    public function searchPallets($query): AnonymousResourceCollection
+    {
+        $employees = Pallet::query()
+            ->where('pallet_number', 'like', '%' . $query . '%')
+            ->get();
+
+        return PalletResource::collection($employees);
     }
 }

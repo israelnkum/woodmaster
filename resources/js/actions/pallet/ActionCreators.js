@@ -63,6 +63,12 @@ export const addFilter = (payload) => {
     }
 }
 
+export const applySearch = (payload) => {
+    return {
+        type: Types.APPLY_SEARCH_RESULTS,
+        payload: payload
+    }
+}
 export const getPalletStats = (payload) => {
     return {
         type: Types.GET_PALLET_STATS,

@@ -7,11 +7,12 @@ import {handleMoveWood} from "../../actions/wood/Action";
 import TlaFormWrapper from "../../commons/tla-form-wrapper";
 import {handleGetPalletSubLogs} from "../../actions/pallet/Action";
 import TlaSelect from "../../commons/tla/TlaSelect";
+import SearchPallet from "../pallet/search-pallet";
 
 function MoveWoodForm(props) {
     const location = useLocation()
     const [loadingSubLogs, setLoadingSubLogs] = useState(false)
-    const {moveWood, getPalletSubLogs, pallets, palletLogs, palletSubLogs} = props
+    const {moveWood, getPalletSubLogs, palletLogs, palletSubLogs} = props
 
     const [disabled, setDisabled] = useState(true)
 
@@ -71,11 +72,12 @@ function MoveWoodForm(props) {
                         <Form.Item hidden name={'sub_logs'}>
                             <Input/>
                         </Form.Item>
-                        <TlaSelect
+                        <SearchPallet form={form}/>
+                       {/* <TlaSelect
                             label={'Pallet'}
                             name={'pallet_id'}
                             required options={pallets}
-                            optionKey={'pallet_number'}/>
+                            optionKey={'pallet_number'}/>*/}
                     </Col>
                 </Row>
             </Spin>
