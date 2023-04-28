@@ -52,6 +52,7 @@ function AllPallets(props) {
                             dataIndex={'square_meter'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="logs" dataIndex={'logs_count'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="woods" dataIndex={'wood_count'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="total sheets" dataIndex={'total_sheets'}/>
                     <Column className={'cursor-pointer'} title="Action" render={(value) => (
                         <Space>
                             <TlaEdit icon
