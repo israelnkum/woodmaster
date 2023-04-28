@@ -146,7 +146,15 @@ class WoodController extends Controller
                     $this->updateWood($request->sub_log, $request->pallet_log_id, $newPalletLog->id);
                 }
             } else {
-                Log::info('not null here');
+                $woods = explode(',', $request->sub_logs);
+
+                foreach ($woods as $wood) {
+                    $findWood = Wood::findOrFail($wood);
+
+                    $newPalletLog = $this->checkLog($request->pallet_id, $findWood->palletLog->log_number);
+
+                    $findWood->update(['pallet_log_id' => $newPalletLog->id]);
+                }
             }
 
             DB::commit();
