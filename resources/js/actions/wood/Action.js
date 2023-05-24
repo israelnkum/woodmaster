@@ -32,6 +32,17 @@ export const handleMoveWood = (data) => (dispatch) => {
     })
 }
 
+export const handleEditLogNumber = (data) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().post('/woods/edit-log', data).then((res) => {
+            dispatch(moveWood(res.data))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
 /**
  * Display a listing of the resource.
  * @returns {function(*): Promise<unknown>}

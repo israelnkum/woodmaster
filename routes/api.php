@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\PalletController;
+use App\Http\Controllers\SpeciesController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\WoodController;
 use Illuminate\Http\Request;
@@ -31,14 +32,18 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::resource('/users', UserController::class);
     Route::get('/pallet/search/{query}', [PalletController::class, 'searchPallets']);
     Route::get('/pallet/woods', [PalletController::class, 'getPalletWood']);
+    Route::get('/pallet/woods/filter', [PalletController::class, 'filterPalletWoods']);
     Route::get('/pallet/{id}/logs', [PalletController::class, 'getPalletLogs']);
     Route::get('/pallet-log/{id}/sub-logs', [PalletController::class, 'getPalletSubLogs']);
     Route::apiResource('/pallets', PalletController::class);
     Route::post('/wood/{id}/barcode', [WoodController::class, 'printBarcode']);
     Route::post('/woods/move', [WoodController::class, 'moveWoods']);
+    Route::post('/woods/edit-log', [WoodController::class, 'editLog']);
     Route::apiResource('/wood', WoodController::class);
 
     Route::get('/pallet/{id}/report', [PalletController::class, 'getPalletReport']);
+
+    Route::apiResource('/species', SpeciesController::class);
 });
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {

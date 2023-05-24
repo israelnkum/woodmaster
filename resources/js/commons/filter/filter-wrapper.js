@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Card, Form, Input} from "antd";
 import {FiFilter, FiPrinter} from "react-icons/fi";
+import dayjs from "dayjs";
 
 function FilterWrapper(props) {
     const {submitFilter, exportFilter, children, initialValue} = props
@@ -12,6 +13,15 @@ function FilterWrapper(props) {
         setLoading(true)
         values.export = false
         values.print = false
+        const dateFormat = 'YYYY-MM-DD';
+
+        if (values.date) {
+            values['startDate'] = dayjs(values.date[0]).format(dateFormat)
+            values['endDate'] = dayjs(values.date[1]).format(dateFormat)
+        }else {
+            values['startDate'] = null
+            values['endDate'] = null
+        }
         submitFilter(new URLSearchParams(values))
             .then(() => setLoading(false))
             .catch(() => setLoading(false))

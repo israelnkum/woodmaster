@@ -4,9 +4,25 @@ import Pagination from 'react-js-pagination'
 import {Typography} from 'antd'
 import {FiArrowLeft, FiArrowRight} from 'react-icons/fi'
 
-function TlaPagination (props) {
-    const { meta, loadData, children, showHeader, extra, rowSelectionActions } = props
+function TlaPagination(props) {
+    const {meta, loadData, children, showHeader, extra, rowSelectionActions, filterExtra} = props
 
+    const PaginationC = () => (
+        <Pagination
+            activePage={meta.current_page}
+            itemsCountPerPage={meta.per_page}
+            totalItemsCount={meta.total || 0}
+            onChange={loadData}
+            pageRangeDisplayed={8}
+            itemClass="page-item"
+            linkClass="page-link"
+            firstPageText="First"
+            lastPageText="Last"
+            hideFirstLastPages={true}
+            nextPageText={<FiArrowRight/>}
+            prevPageText={<FiArrowLeft/>}
+        />
+    )
     return (
         <div>
             {
@@ -19,22 +35,13 @@ function TlaPagination (props) {
                     {extra}
                 </div>
             }
+            <hr/>
+            <div className={'flex flex-wrap justify-between py-2 items-center'}>
+                {filterExtra ?? <>&nbsp;</>} <PaginationC/>
+            </div>
             {children}
-            <div style={{ marginTop: 10 }} align={'right'}>
-                <Pagination
-                    activePage={meta.current_page}
-                    itemsCountPerPage={meta.per_page}
-                    totalItemsCount={meta.total || 0}
-                    onChange={loadData}
-                    pageRangeDisplayed={8}
-                    itemClass="page-item"
-                    linkClass="page-link"
-                    firstPageText="First"
-                    lastPageText="Last"
-                    hideFirstLastPages={true}
-                    nextPageText={<FiArrowRight />}
-                    prevPageText={<FiArrowLeft />}
-                />
+            <div className={'flex flex-wrap justify-end py-2 items-center'}>
+                <PaginationC/>
             </div>
         </div>
 
@@ -49,6 +56,7 @@ TlaPagination.defaultProps = {
     },
     showHeader: true
 }
+
 TlaPagination.propTypes = {
     meta: PropTypes.object.isRequired,
     children: PropTypes.node,
@@ -56,6 +64,7 @@ TlaPagination.propTypes = {
     showHeader: PropTypes.bool,
     rowSelectionActions: PropTypes.any,
     extra: PropTypes.any,
+    filterExtra: PropTypes.any,
 }
 
 export default TlaPagination

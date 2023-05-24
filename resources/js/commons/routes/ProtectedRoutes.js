@@ -9,6 +9,7 @@ import AllPallets from "../../pages/pallet/all-pallets";
 import PageWrapper from "../../pages/common/page-wrapper";
 import AllWood from "../../pages/wood/all-wood";
 import PalletDetail from "../../pages/pallet/pallet-detail";
+import AllSpecies from "../../pages/species/all-species";
 
 const ProtectedRoutes = () => {
     const location = useLocation()
@@ -25,6 +26,8 @@ const ProtectedRoutes = () => {
                     <Route exact element={<AllPallets/>} path='pallets'/>
                     <Route exact element={<PalletDetail/>} path='pallets/:id/details'/>
                     <Route exact element={<AllWood/>} path='wood'/>
+
+                    <Route exact element={<AllSpecies/>} path='species'/>
                 </Route>
                 <Route exact>
                     <>not found</>

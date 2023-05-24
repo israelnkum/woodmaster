@@ -26,7 +26,7 @@ const TlaSelect = (props) => {
                     options.map((option) => (
                         <Select.Option
                             key={option.id || option.name || option}
-                            value={optionKey === "self" ? option : option.id}>
+                            value={optionKey === "self" ? option : parseInt(option.id)}>
                             {optionKey === "self" ? option : option[optionKey]}
                         </Select.Option>
                     ))

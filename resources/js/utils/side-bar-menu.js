@@ -20,7 +20,7 @@ export const SidebarMenus = [
         children: [],
         permissions: ['view-pallet'],
         icon: 'pallet'
-    }
+    },
     // {
     //     title: 'Wood',
     //     link: '#',
@@ -41,11 +41,19 @@ export const SidebarMenus = [
     //     permissions: ['add-wood', 'view-wood'],
     //     icon: 'pim'
     // },
-    // {
-    //     title: 'Config',
-    //     link: '/app/configs/departments',
-    //     children: [],
-    //     permissions: ['Admin'],
-    //     icon: 'config'
-    // },
+    {
+        title: 'All Species',
+        link: '/app/species',
+        children: [],
+        permissions: ['view-pallet'],
+        icon: 'species'
+    },
+    {
+        title: 'Add Species',
+        link: '/app/species/form',
+        modal: true,
+        children: [],
+        permissions: ['add-pallet'],
+        icon: 'add'
+    },
 ]

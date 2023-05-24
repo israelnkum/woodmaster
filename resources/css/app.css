@@ -1,6 +1,7 @@
 @import "~slick-carousel/slick/slick.css";
 @import "~slick-carousel/slick/slick-theme.css";
 @import "../js/assets/css/tla-modal.css";
+@import "../js/assets/css/tla-pagination.css";
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

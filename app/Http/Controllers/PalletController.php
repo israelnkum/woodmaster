@@ -11,6 +11,7 @@ use App\Models\Pallet;
 use App\Models\PalletLog;
 use App\Models\Wood;
 use App\Traits\HasPrint;
+use Carbon\Carbon;
 use Exception;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\JsonResponse;
@@ -65,6 +66,14 @@ class PalletController extends Controller
             });
         });
 
+        $pallets->when($request->has('startDate') &&
+            $request->startDate !== 'null', function ($q) use ($request) {
+            return $q->whereBetween('created_at', [
+                Carbon::parse($request->startDate)->startOfDay(),
+                Carbon::parse($request->endDate)->endOfDay()
+            ]);
+        });
+
         return PalletResource::collection($pallets->orderBy('pallet_number')->paginate(200));
     }
 
@@ -85,6 +94,31 @@ class PalletController extends Controller
     {
         $pal = Pallet::findOrFail($request->query('palletId'));
         return WoodResource::collection($pal->woods()->paginate(100));
+    }
+
+    /**
+     * @param Request $request
+     * @return AnonymousResourceCollection
+     */
+    public function filterPalletWoods(Request $request): AnonymousResourceCollection
+    {
+        $woodQuery = Wood::query();
+
+        $woodQuery->when($request->has('pallet_log_id') &&
+            $request->pallet_log_id !== 'all', function ($q) use ($request) {
+            Log::info('eee');
+            return $q->where('pallet_log_id', $request->pallet_log_id);
+        });
+
+        $woodQuery->when($request->has('startDate') &&
+            $request->startDate !== 'null', function ($q) use ($request) {
+            return $q->whereBetween('created_at', [
+                Carbon::parse($request->startDate)->startOfDay(),
+                Carbon::parse($request->endDate)->endOfDay()
+            ]);
+        });
+
+        return WoodResource::collection($woodQuery->paginate(100));
     }
 
     public function getPalletSubLogs($palletLogId): JsonResponse
@@ -228,7 +262,7 @@ class PalletController extends Controller
             DB::commit();
 
             return response()->json([
-                'message' => 'Emergency Contact Deleted'
+                'message' => 'Pallet Deleted'
             ]);
         } catch (Exception $exception) {
             Log::error('Delete Pallet ', [$exception->getMessage()]);
