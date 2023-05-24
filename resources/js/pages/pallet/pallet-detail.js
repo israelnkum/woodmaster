@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import {handleDeletePallet, handleGetPalletWood, handleGetSinglePallet} from "../../actions/pallet/Action";
 import {useOutletContext, useParams} from "react-router";
-import {Affix, Card, Col, Row, Spin, Tabs} from "antd";
+import {Affix, Card, Checkbox, Col, Row, Spin, Tabs} from "antd";
 import WoodTable from "../wood/wood-table";
 import WoodForm from "../wood/wood-form";
 import PalletInfo from "./pallet-info";
@@ -12,6 +12,7 @@ import PalletStats from "./pallet-stats";
 function PalletDetail(props) {
     const {getPallet, getPalletWood, palletWood, pallet, palletLogs, filter} = props
     const [loading, setLoading] = useState(true)
+    const [displayAll, setDisplayAll] = useState(false)
     const [loadingWood, setLoadingWood] = useState(true)
     const {setPageInfo} = useOutletContext();
     const {id} = useParams()
@@ -20,6 +21,10 @@ function PalletDetail(props) {
         title: 'Pallet Detail', buttonText: 'Wood'
     }
 
+
+    filter['palletId'] = id
+
+
     useEffect(() => {
         setPageInfo(pageData)
 
@@ -27,8 +32,6 @@ function PalletDetail(props) {
             localStorage.setItem('totalSquareMeter', res.data.square_meter)
             setLoading(false)
         })
-
-        filter['palletId'] = id
         getPalletWood(new URLSearchParams(filter)).then(() => setLoadingWood(false))
     }, [])
 
@@ -41,7 +44,9 @@ function PalletDetail(props) {
                     <Affix offsetTop={70}>
                         <WoodForm id={id} palletNumber={pallet?.pallet_number}/>
                     </Affix>
-                    <WoodTable wood={palletWood}/>
+                    <WoodTable displayAllNode={
+                        <Checkbox onChange={() => setDisplayAll(!displayAll)}>Display All</Checkbox>
+                    } wood={palletWood}/>
                 </Col>
                 <Col span={6} xs={24} sm={24} md={6}>
                     <Affix offsetTop={70}>

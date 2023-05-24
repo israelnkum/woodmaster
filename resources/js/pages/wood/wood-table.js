@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
@@ -7,7 +7,7 @@ import {handleDeleteWood, handlePrintBarcode} from "../../actions/wood/Action";
 import TlaEdit from "../../commons/tla-edit";
 import {FiPrinter} from "react-icons/fi";
 import {handleGetPalletWood} from "../../actions/pallet/Action";
-import {useParams} from "react-router";
+import {useLocation, useParams} from "react-router";
 import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import TlaAddNew from "../../commons/tla-add-new";
@@ -17,14 +17,27 @@ import FilterWoods from "./filter-woods";
 const {Column} = Table
 
 function WoodTable(props) {
-    const {wood, getWood, deleteWood, filter, printBarCode} = props
+    const {wood, getWood, deleteWood, filter, printBarCode, palletStats, displayAllNode} = props
+    const [totalBundle, setTotalBundle] = useState(0)
     const [selectedRowKeys, setSelectedRowKeys] = useState([]);
     const {id} = useParams()
 
+    useEffect(() => {
+        let total = 0;
+        const me =
+            Object.keys(palletStats).length === 0 ? <>No Data</> :
+                palletStats?.items.map((item) => Object.keys(item).map((itm) => total += parseInt(item[itm][0])))
+        setTotalBundle(total)
+    }, [id])
     return (
         <div className={'pb-10'}>
             <TlaTableWrapper
-                filterExtra={<FilterWoods/>}
+                filterExtra={
+                <>
+                    <FilterWoods/>
+                    {displayAllNode}
+                </>
+                }
                 hasSelection
                 filterObj={{...filter, palletId: id}}
                 callbackFunction={getWood}
@@ -45,6 +58,7 @@ function WoodTable(props) {
                 }
                 extra={
                     <Space>
+                        <p><span className={'font-bold'}>Total Bundle: </span>{totalBundle}</p>
                         <TotalSquareMeter/>
                         <TlaAddNew data={{sub_logs: []}} link={`/app/pallet/${id}/woods/move`}>
                             <Button>Move</Button>
@@ -81,11 +95,14 @@ WoodTable.propTypes = {
     wood: PropTypes.object,
     filter: PropTypes.object,
     getWood: PropTypes.func,
+    palletStats: PropTypes.any,
+    displayAllNode: PropTypes.any,
     printBarCode: PropTypes.func
 }
 
 const mapStateToProps = (state) => ({
-    filter: state.woodReducer.filter
+    filter: state.woodReducer.filter,
+    palletStats: state.palletReducer.palletStats
 })
 
 const mapDispatchToProps = (dispatch) => ({

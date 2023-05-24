@@ -18,7 +18,7 @@ function PalletStats(props) {
 
 
     return (
-        <div className={'mb-2'}>
+        <div className={'mb-2 overflow-auto max-h-[400px]'}>
             <Spin spinning={loading}>
                 {
                     !loading &&
