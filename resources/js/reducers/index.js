@@ -5,6 +5,7 @@ import userReducer from './user-reducer'
 import commonReducer from "./common-reducer";
 import woodReducer from "./wood-reducer";
 import palletReducer from "./pallet-reducer";
+import specieReducer from "./species-reducer";
 
 const persistConfig = {
     key: 'root',
@@ -13,7 +14,8 @@ const persistConfig = {
         'userReducer',
         'commonReducer',
         'woodReducer',
-        'palletReducer'
+        'palletReducer',
+        'specieReducer',
     ]
 }
 
@@ -21,7 +23,8 @@ const rootReducer = combineReducers({
     userReducer,
     commonReducer,
     woodReducer,
-    palletReducer
+    palletReducer,
+    specieReducer
 })
 
 export default persistReducer(persistConfig, rootReducer)

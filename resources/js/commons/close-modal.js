@@ -1,15 +1,23 @@
 import React from 'react'
 import {Button} from 'antd'
 import {useNavigate} from "react-router-dom";
+import PropTypes from "prop-types";
 
-function CloseModal () {
-     const navigate = useNavigate()
+function CloseModal({btnText}) {
+    const navigate = useNavigate()
     return (
         <Button size={'large'} block onClick={() => navigate(-1)}>
-            Cancel
+            {btnText}
         </Button>
     )
 }
 
+CloseModal.defaultProps = {
+    btnText: 'Cancel'
+}
 
-export default (CloseModal)
+CloseModal.propTypes = {
+    btnText: PropTypes.string
+}
+
+export default CloseModal

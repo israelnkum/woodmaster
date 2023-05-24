@@ -7,6 +7,7 @@ import {SidebarMenus} from "../../utils/side-bar-menu";
 import MenuHelper from "../menu-helper";
 import SideProfile from "./side-profile";
 import {BsStack} from "react-icons/bs";
+import {GiDeadWood} from "react-icons/gi";
 
 function AppSidebar(props) {
     const {name} = props
@@ -22,7 +23,8 @@ function AppSidebar(props) {
                 <MenuHelper icons={{
                     home: <FiHome/>,
                     pallet: <BsStack/>,
-                    add: <FiPlus/>
+                    add: <FiPlus/>,
+                    species: <GiDeadWood/>
                 }} menus={SidebarMenus} direction={'inline'}/>
             </Layout.Sider>
         </Affix>

@@ -12,6 +12,7 @@ import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import TlaAddNew from "../../commons/tla-add-new";
 import TotalSquareMeter from "../pallet/total-square-meter";
+import FilterWoods from "./filter-woods";
 
 const {Column} = Table
 
@@ -23,6 +24,7 @@ function WoodTable(props) {
     return (
         <div className={'pb-10'}>
             <TlaTableWrapper
+                filterExtra={<FilterWoods/>}
                 hasSelection
                 filterObj={{...filter, palletId: id}}
                 callbackFunction={getWood}
@@ -32,8 +34,11 @@ function WoodTable(props) {
                 rowSelectionActions={
                     selectedRowKeys.length > 0 ?
                         <Space>
-                            {/*<Button danger>Delete</Button>*/}
-                            <TlaAddNew data={{ sub_logs: selectedRowKeys }} link={`/app/pallet/${id}/woods/move`}>
+                            <TlaAddNew data={{sub_logs: selectedRowKeys, pallet_id: id}}
+                                       link={`/app/pallet/${id}/woods/edit-log`}>
+                                <Button>Edit Log Number</Button>
+                            </TlaAddNew>
+                            <TlaAddNew data={{sub_logs: selectedRowKeys}} link={`/app/pallet/${id}/woods/move`}>
                                 <Button>Move</Button>
                             </TlaAddNew>
                         </Space> : <></>
@@ -41,7 +46,7 @@ function WoodTable(props) {
                 extra={
                     <Space>
                         <TotalSquareMeter/>
-                        <TlaAddNew data={{ sub_logs: [] }} link={`/app/pallet/${id}/woods/move`}>
+                        <TlaAddNew data={{sub_logs: []}} link={`/app/pallet/${id}/woods/move`}>
                             <Button>Move</Button>
                         </TlaAddNew>
                     </Space>

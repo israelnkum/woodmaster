@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import {handleDeletePallet, handleGetPalletWood, handleGetSinglePallet} from "../../actions/pallet/Action";
 import {useOutletContext, useParams} from "react-router";
-import {Card, Col, Row, Spin, Tabs} from "antd";
+import {Affix, Card, Col, Row, Spin, Tabs} from "antd";
 import WoodTable from "../wood/wood-table";
 import WoodForm from "../wood/wood-form";
 import PalletInfo from "./pallet-info";
@@ -33,16 +33,18 @@ function PalletDetail(props) {
     }, [])
 
 
-
     return (<div className={'pb-10'}>
-            <Spin spinning={loadingWood || loading}>
-                {/*<FilterPallets/>*/}
-                {(!loading && !loadingWood) && <Row gutter={10}>
-                    <Col span={18} xs={24} sm={24} md={18}>
+        <Spin spinning={loadingWood || loading}>
+            {/*<FilterPallets/>*/}
+            {(!loading && !loadingWood) && <Row gutter={10}>
+                <Col span={18} xs={24} sm={24} md={18}>
+                    <Affix offsetTop={70}>
                         <WoodForm id={id} palletNumber={pallet?.pallet_number}/>
-                        <WoodTable wood={palletWood}/>
-                    </Col>
-                    <Col span={6} xs={24} sm={24} md={6}>
+                    </Affix>
+                    <WoodTable wood={palletWood}/>
+                </Col>
+                <Col span={6} xs={24} sm={24} md={6}>
+                    <Affix offsetTop={70}>
                         <Card>
                             <Tabs destroyInactiveTabPane={true} items={[
                                 {
@@ -58,10 +60,11 @@ function PalletDetail(props) {
                                 }
                             ]}/>
                         </Card>
-                    </Col>
-                </Row>}
-            </Spin>
-        </div>)
+                    </Affix>
+                </Col>
+            </Row>}
+        </Spin>
+    </div>)
 }
 
 PalletDetail.propTypes = {
@@ -79,7 +82,7 @@ const mapStateToProps = (state) => ({
     pallet: state.palletReducer.pallet,
     palletWood: state.woodReducer.woods,
     palletLogs: state.palletReducer.palletLogs,
-    filter: state.palletReducer.filter
+    filter: state.woodReducer.filter
 })
 
 const mapDispatchToProps = (dispatch) => ({

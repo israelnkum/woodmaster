@@ -10,7 +10,7 @@ import {
     removePallet,
     updatePallet,
 } from './ActionCreators'
-import {getWoods} from "../wood/ActionCreators";
+import {addWoodFilter, getWoods} from "../wood/ActionCreators";
 import {completeExport} from "../../utils";
 
 /**
@@ -62,7 +62,20 @@ export const handleGetPalletWood = (params) => (dispatch) => {
         api().get(`/pallet/woods?${params}`).then((res) => {
             dispatch(getWoods(res.data))
             params?.delete('page')
-            params && dispatch(addFilter(Object.fromEntries(params)))
+            params && dispatch(addWoodFilter(Object.fromEntries(params)))
+            resolve(res)
+        }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
+export const handleFilterPalletWood = (params) => (dispatch) => {
+    return new Promise((resolve, reject) => {
+        api().get(`/pallet/woods/filter?${params}`).then((res) => {
+            dispatch(getWoods(res.data))
+            params?.delete('page')
+            params && dispatch(addWoodFilter(Object.fromEntries(params)))
             resolve(res)
         }).catch((err) => {
             reject(err)

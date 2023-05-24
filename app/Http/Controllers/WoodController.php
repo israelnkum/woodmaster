@@ -218,6 +218,13 @@ class WoodController extends Controller
             ], 400);
         }
     }
+
+    public function updateWood($subLog, $palletLogId, $newPalletLogId): void
+    {
+        Wood::query()->where('sub_log', $subLog)
+            ->where('pallet_log_id', $palletLogId)
+            ->update(['pallet_log_id' => $newPalletLogId]);
+    }
 //    public function moveSubLog(int $palletId, $logNumber, $subLog){
 //        $pallet = Pallet::findOrFail($palletId);
 //
@@ -234,11 +241,48 @@ class WoodController extends Controller
 //            ->update(['pallet_log_id' => $newPalletLog->id]);
 //    }
 
-    public function updateWood($subLog, $palletLogId, $newPalletLogId): void
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function editLog(Request $request): JsonResponse
     {
-        Wood::query()->where('sub_log', $subLog)
-            ->where('pallet_log_id', $palletLogId)
-            ->update(['pallet_log_id' => $newPalletLogId]);
+        $pallet = Pallet::findOrFail($request->pallet_id);
+
+        $woods = explode(',', $request->sub_logs);
+
+        DB::beginTransaction();
+        try {
+            if ($request->create_new === 'true') {
+                $palletLog = $pallet->logs()->updateOrCreate([
+                    'log_number' => $request->log_number
+                ], [
+                    'log_number' => $request->log_number,
+                    'user_id' => Auth::id()
+                ]);
+            } else {
+                $palletLog = PalletLog::findOrFail($request->pallet_log_id);
+            }
+
+            Wood::query()->whereIn('id', $woods)->update([
+                'pallet_log_id' => $palletLog->id
+            ]);
+
+            DB::commit();
+
+            return response()->json([
+                'message' => 'Log Number Updated'
+            ]);
+        } catch (Exception $exception) {
+            DB::rollBack();
+
+            Log::error('Edit Log Number Error ', [$exception]);
+
+            return response()->json([
+                'message' => "Something went wrong"
+            ], 400);
+        }
+
     }
 
     /**

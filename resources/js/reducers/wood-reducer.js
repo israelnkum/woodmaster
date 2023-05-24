@@ -1,20 +1,28 @@
-import { Types } from '../actions/wood/Types'
+import {Types} from '../actions/wood/Types'
+
 const initialState = {
     woods: {
         data: [],
         meta: {}
     },
-    filter: {},
+    filter: {
+        pallet_log_id: 'all',
+        date: 'null',
+        palletId: null
+    },
     wood: {}
 }
 
-export default function woodReducer (state = initialState, action) {
+export default function woodReducer(state = initialState, action) {
     switch (action.type) {
         case Types.GET_WOODS:
-            return { ...state, woods: action.payload }
+            return {...state, woods: action.payload}
 
         case Types.GET_WOOD:
-            return { ...state, wood: action.payload }
+            return {...state, wood: action.payload}
+
+        case Types.ADD_WOOD_FILTER:
+            return {...state, filter: action.payload}
 
         case Types.ADD_WOOD:
             return {
@@ -39,7 +47,7 @@ export default function woodReducer (state = initialState, action) {
         case Types.REMOVE_WOOD:
             return {
                 ...state,
-                woods: { ...state.woods, data: state.woods.data.filter((wood) => wood.id !== action.id) }
+                woods: {...state.woods, data: state.woods.data.filter((wood) => wood.id !== action.id)}
             }
 
         default:

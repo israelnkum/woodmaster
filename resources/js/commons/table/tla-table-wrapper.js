@@ -15,6 +15,7 @@ function TlaTableWrapper({
                              hasSelection,
                              filterObj,
                              extra,
+                             filterExtra,
                              setSelectedRows,
                              rowSelectionActions
                          }) {
@@ -33,12 +34,14 @@ function TlaTableWrapper({
     return (
 
         <Card>
-            <TlaPagination rowSelectionActions={rowSelectionActions} extra={extra} meta={meta} loadData={(pageNumber) => {
-                const urlParams = new URLSearchParams(filterObj)
-                urlParams.append('page', pageNumber);
-                setLoading(true);
-                (callbackFunction(urlParams)).then(() => setLoading(false))
-            }}>
+            <TlaPagination filterExtra={filterExtra}
+                           rowSelectionActions={rowSelectionActions} extra={extra} meta={meta}
+                           loadData={(pageNumber) => {
+                               const urlParams = new URLSearchParams(filterObj)
+                               urlParams.append('page', pageNumber);
+                               setLoading(true);
+                               (callbackFunction(urlParams)).then(() => setLoading(false))
+                           }}>
                 <Table rowSelection={hasSelection ? rowSelection : null} pagination={false}
                        loading={loading} dataSource={data} scroll={{x: 50}} rowKey={'id'}>
                     {
@@ -84,6 +87,7 @@ TlaTableWrapper.propTypes = {
     numberColumnTitle: PropTypes.string,
     numberColumn: PropTypes.bool,
     extra: PropTypes.any,
+    filterExtra: PropTypes.any,
     rowSelectionActions: PropTypes.any,
     setSelectedRows: PropTypes.func
 }

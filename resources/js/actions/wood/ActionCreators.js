@@ -42,3 +42,10 @@ export const updateWood = (payload) => {
       payload: payload
   }
 }
+
+export const addWoodFilter = (payload) => {
+  return {
+    type: Types.ADD_WOOD_FILTER,
+      payload: payload
+  }
+}

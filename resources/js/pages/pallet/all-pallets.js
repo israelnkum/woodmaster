@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Space, Table} from 'antd'
+import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import TlaTableWrapper from "../../commons/table/tla-table-wrapper";
@@ -11,6 +11,7 @@ import TlaConfirm from "../../commons/TlaConfirm";
 import {TlaSuccess} from "../../utils/messages";
 import {useNavigate} from "react-router-dom";
 import FilterPallets from "./filter-pallets";
+import TlaAddNew from "../../commons/tla-add-new";
 
 const {Column} = Table
 
@@ -50,9 +51,19 @@ function AllPallets(props) {
                             dataIndex={'date_created'}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="square meter"
                             dataIndex={'square_meter'}/>
-                    <Column className={'cursor-pointer'} onCell={Details} title="logs" dataIndex={'logs_count'}/>
+                    <Column className={'cursor-pointer'} title="Logs" render={({id, logs_count, pallet_logs}) => (
+                        <Space>
+                            {logs_count}
+                            <TlaAddNew link={`${id}/logs`} data={pallet_logs}>
+                                <Button size={'small'}>
+                                    View
+                                </Button>
+                            </TlaAddNew>
+                        </Space>
+                    )}/>
                     <Column className={'cursor-pointer'} onCell={Details} title="woods" dataIndex={'wood_count'}/>
-                    <Column className={'cursor-pointer'} onCell={Details} title="total sheets" dataIndex={'total_sheets'}/>
+                    <Column className={'cursor-pointer'} onCell={Details} title="total sheets"
+                            dataIndex={'total_sheets'}/>
                     <Column className={'cursor-pointer'} title="Action" render={(value) => (
                         <Space>
                             <TlaEdit icon

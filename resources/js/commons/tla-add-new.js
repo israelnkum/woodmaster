@@ -21,7 +21,10 @@ TlaAddNew.defaultProps = {
 
 TlaAddNew.propTypes = {
     children: PropTypes.node,
-    data: PropTypes.object,
+    data: PropTypes.oneOfType([
+        PropTypes.object,
+        PropTypes.array
+    ]),
     link: PropTypes.string.isRequired,
     modal: PropTypes.bool,
 }
