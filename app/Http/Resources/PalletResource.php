@@ -16,6 +16,7 @@ class PalletResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $date = $this->custom_created_date ?? $this->created_at;
         return [
             'id' => $this->id,
             'pallet_number' => $this->pallet_number,
@@ -28,7 +29,7 @@ class PalletResource extends JsonResource
             'quality' => $this->quality->name,
             'quality_id' => $this->quality_id,
             'pallet_logs' => $this->logs,
-            'date_created' => Carbon::parse($this->created_at)->format('Y-m-d'),
+            'custom_created_date' => Carbon::parse($date)->format('Y-m-d'),
             'species_id' => $this->species_id
         ];
     }

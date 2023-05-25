@@ -155,7 +155,7 @@ export const handlePrintPalletReport = (id, palletNumber, excel = true) => async
     return new Promise((resolve, reject) => {
         api().get(`/pallet/${id}/report?export=${excel}`, {responseType: 'blob'})
             .then((res) => {
-                completeExport(res.data, `pallet-${palletNumber}`)
+                completeExport(res.data, `Rep${palletNumber}`)
                 resolve()
             }).catch((err) => {
             reject(err)

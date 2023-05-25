@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import {connect} from "react-redux";
 import {handleDeletePallet, handleGetPalletWood, handleGetSinglePallet} from "../../actions/pallet/Action";
 import {useOutletContext, useParams} from "react-router";
-import {Affix, Card, Checkbox, Col, Row, Spin, Tabs} from "antd";
+import {Affix, Button, Card, Col, Row, Spin, Tabs} from "antd";
 import WoodTable from "../wood/wood-table";
 import WoodForm from "../wood/wood-form";
 import PalletInfo from "./pallet-info";
@@ -21,9 +21,7 @@ function PalletDetail(props) {
         title: 'Pallet Detail', buttonText: 'Wood'
     }
 
-
     filter['palletId'] = id
-
 
     useEffect(() => {
         setPageInfo(pageData)
@@ -32,42 +30,49 @@ function PalletDetail(props) {
             localStorage.setItem('totalSquareMeter', res.data.square_meter)
             setLoading(false)
         })
+        filter['displayAll'] = false
         getPalletWood(new URLSearchParams(filter)).then(() => setLoadingWood(false))
     }, [])
-
 
     return (<div className={'pb-10'}>
         <Spin spinning={loadingWood || loading}>
             {/*<FilterPallets/>*/}
-            {(!loading && !loadingWood) && <Row gutter={10}>
-                <Col span={18} xs={24} sm={24} md={18}>
-                    <Affix offsetTop={70}>
-                        <WoodForm id={id} palletNumber={pallet?.pallet_number}/>
-                    </Affix>
-                    <WoodTable displayAllNode={
-                        <Checkbox onChange={() => setDisplayAll(!displayAll)}>Display All</Checkbox>
-                    } wood={palletWood}/>
-                </Col>
-                <Col span={6} xs={24} sm={24} md={6}>
-                    <Affix offsetTop={70}>
-                        <Card>
-                            <Tabs destroyInactiveTabPane={true} items={[
-                                {
-                                    key: 'detail',
-                                    label: 'Pallet Info',
-                                    children: <PalletInfo pallet={pallet} palletLogs={palletLogs} loading={loading}/>,
-                                    forceRender: true
-                                },
-                                {
-                                    key: 'pallet-info',
-                                    label: 'Pallet Stats',
-                                    children: <PalletStats/>
-                                }
-                            ]}/>
-                        </Card>
-                    </Affix>
-                </Col>
-            </Row>}
+            {(!loading && !loadingWood) &&
+                <Row gutter={10}>
+                    <Col span={18} xs={24} sm={24} md={18}>
+                        <Affix offsetTop={70}>
+                            <WoodForm id={id} palletNumber={pallet?.pallet_number}/>
+                        </Affix>
+                        <WoodTable displayAllNode={
+                            <Button onClick={() => {
+                                setDisplayAll(!displayAll)
+                                setLoadingWood(true);
+                                filter['displayAll'] = !displayAll;
+                                getPalletWood(new URLSearchParams(filter)).then(() => setLoadingWood(false))
+                            }}>{displayAll ? 'Group' : 'Display All'}</Button>
+                        } wood={palletWood}/>
+                    </Col>
+                    <Col span={6} xs={24} sm={24} md={6}>
+                        <Affix offsetTop={70}>
+                            <Card>
+                                <Tabs destroyInactiveTabPane={true} items={[
+                                    {
+                                        key: 'detail',
+                                        label: 'Pallet Info',
+                                        children: <PalletInfo pallet={pallet} palletLogs={palletLogs}
+                                                              loading={loading}/>,
+                                        forceRender: true
+                                    },
+                                    {
+                                        key: 'pallet-info',
+                                        label: 'Pallet Stats',
+                                        children: <PalletStats/>
+                                    }
+                                ]}/>
+                            </Card>
+                        </Affix>
+                    </Col>
+                </Row>}
         </Spin>
     </div>)
 }

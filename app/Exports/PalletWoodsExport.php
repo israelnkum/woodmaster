@@ -71,7 +71,7 @@ class PalletWoodsExport implements FromCollection, WithHeadings,
             '',
             '',
             'Riferimento: ',
-            Carbon::parse($this->pallet->created_at)->format('d/m/Y')
+            Carbon::parse($this->pallet->custom_created_date ?? $this->pallet->created_at)->format('d/m/Y')
         ])->addHeader([
             '',
             '',

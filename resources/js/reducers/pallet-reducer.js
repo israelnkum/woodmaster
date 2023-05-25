@@ -31,11 +31,14 @@ export default function palletReducer(state = initialState, action) {
             return {...state, filter: action.payload}
 
         case Types.UPDATE_SQUARE_METER:
-            return {...state, pallet: {
-                ...state.pallet,
+            return {
+                ...state, pallet: {
+                    ...state.pallet,
                     square_meter: state.pallet.square_meter + action.payload.square_meter,
                     total_sheets: state.pallet.total_sheets + action.payload.sheets,
-            }}
+                    wood_count: state.pallet.wood_count + 1,
+                }
+            }
 
         case Types.GET_PALLET_LOGS:
             return {...state, palletLogs: action.payload}

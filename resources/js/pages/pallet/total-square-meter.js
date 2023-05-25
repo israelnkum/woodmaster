@@ -8,6 +8,7 @@ function TotalSquareMeter(props) {
 
     return (
         <Space>
+            <p><span className={'font-bold'}>Total Bundle:</span> {pallet?.wood_count}</p> |
             <p><span className={'font-bold'}>Total Sheets:</span> {pallet?.total_sheets}</p> |
             <p><span className={'font-bold'}>Square Meter:</span> {pallet?.square_meter.toFixed(2)}</p>
         </Space>

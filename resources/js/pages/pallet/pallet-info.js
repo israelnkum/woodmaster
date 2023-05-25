@@ -28,7 +28,7 @@ function PalletDetail(props) {
                 <Descriptions.Item label="THICKNESS">{pallet?.thickness}</Descriptions.Item>
                 <Descriptions.Item label="QUALITY">{pallet?.quality}</Descriptions.Item>
                 <Descriptions.Item label="SPECIES">{pallet?.species}</Descriptions.Item>
-                <Descriptions.Item label="DATE">{pallet?.date_created}</Descriptions.Item>
+                <Descriptions.Item label="DATE">{pallet?.custom_created_date}</Descriptions.Item>
             </Descriptions>
             <Divider className={'!m-1'}/>
             <div className={'flex justify-center'}>

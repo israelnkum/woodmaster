@@ -291,17 +291,16 @@ class WoodController extends Controller
      * @param $id
      * @return JsonResponse|null
      */
-    public function destroy($id): ?JsonResponse
+    public function destroy($id)
     {
         DB::beginTransaction();
         try {
-            $wood = Wood::findOrFail($id);
-            $wood->delete();
+            Wood::destroy(explode(',', $id));
 
             DB::commit();
 
             return response()->json([
-                'message' => 'Wood Deleted'
+                'message' => 'Wood(s) Deleted'
             ]);
         } catch (Exception $exception) {
             Log::error('Delete Wood ', [$exception->getMessage()]);
