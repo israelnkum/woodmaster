@@ -58,7 +58,7 @@ const TlaConfirm = (props) => {
     return (
         <>
             <GlobalStyles/>
-            <Button title={'Delete'} onClick={confirm} icon={showIcon && <FiTrash2 className={'icon'}/>}>
+            <Button title={'Delete'} danger onClick={confirm} icon={showIcon && <FiTrash2 className={'icon'}/>}>
                 {btnText}
             </Button>
         </>

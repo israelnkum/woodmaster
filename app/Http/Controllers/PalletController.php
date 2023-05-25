@@ -92,8 +92,14 @@ class PalletController extends Controller
      */
     public function getPalletWood(Request $request): AnonymousResourceCollection
     {
+        Log::info($request);
         $pal = Pallet::findOrFail($request->query('palletId'));
-        return WoodResource::collection($pal->woods()->paginate($pal->woods()->count()));
+
+        if ($request->has('displayAll') && $request->displayAll === 'true') {
+            return WoodResource::collection($pal->woods()->paginate($pal->woods()->count()));
+        }
+
+        return WoodResource::collection($pal->woods()->paginate(100));
     }
 
     /**

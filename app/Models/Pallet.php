@@ -21,7 +21,12 @@ class Pallet extends Model
         'thickness',
         'quality_id',
         'species_id',
-        'user_id'
+        'user_id',
+        'custom_created_date'
+    ];
+
+    protected $casts = [
+      'custom_created_date' => 'date'
     ];
 
     /**
@@ -48,7 +53,6 @@ class Pallet extends Model
         return $this->hasManyThrough(Wood::class, PalletLog::class);
     }
 
-
     /**
      * @return HasMany
      */
@@ -56,6 +60,4 @@ class Pallet extends Model
     {
         return $this->hasMany(PalletLog::class);
     }
-
-
 }

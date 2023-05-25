@@ -1,12 +1,13 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
-import {Button, Col, Form, Input, Row, Select, Spin} from 'antd'
+import {Button, Col, DatePicker, Form, Input, Row, Select, Spin} from 'antd'
 import {connect} from 'react-redux'
 import {useLocation, useNavigate} from "react-router-dom";
 import {handleAddPallet, handleGetPalletLogs, handleUpdatePallet} from "../../actions/pallet/Action";
 import {TlaError, TlaSuccess} from "../../utils/messages";
 import {TlaModal} from "../../commons/pop-ups/tla-modal";
 import {thicknesses} from "../../utils";
+import dayjs from "dayjs";
 
 function PalletForm(props) {
     const {addPallet, updatePallet, species, qualities, getPalletLogs} = props
@@ -18,7 +19,11 @@ function PalletForm(props) {
     const {state} = useLocation()
 
     const formValues = {
-        id: 0, pallet_number: null, ...state.data
+        id: 0,
+        pallet_number: null,
+        ...state.data,
+        custom_created_date: state?.data ? dayjs(state.data.custom_created_date) : null,
+
     }
 
     const onFinish = (values) => {
@@ -39,12 +44,20 @@ function PalletForm(props) {
                 <Form layout={'vertical'} form={form} initialValues={formValues} onFinish={onFinish}
                       title={`${(formValues.id === 0 ? "New" : "Edit")} Pallet`}>
                     <Row gutter={10}>
-                        <Col span={24}>
+                        <Col span={12}>
                             <Form.Item name="pallet_number" label="pallet number"
                                        rules={[{
                                            required: true, message: 'Required'
                                        }]}>
                                 <Input size={'large'}/>
+                            </Form.Item>
+                        </Col>
+                        <Col span={12}>
+                            <Form.Item name="custom_created_date" label="Date"
+                                       rules={[{
+                                           required: true, message: 'Required'
+                                       }]}>
+                                <DatePicker size={'large'}/>
                             </Form.Item>
                         </Col>
                         <Col span={12}>
