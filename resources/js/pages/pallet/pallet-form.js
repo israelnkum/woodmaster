@@ -44,7 +44,7 @@ function PalletForm(props) {
                 <Form layout={'vertical'} form={form} initialValues={formValues} onFinish={onFinish}
                       title={`${(formValues.id === 0 ? "New" : "Edit")} Pallet`}>
                     <Row gutter={10}>
-                        <Col span={12}>
+                        <Col span={formValues.id === 0 ? 24 : 12}>
                             <Form.Item name="pallet_number" label="pallet number"
                                        rules={[{
                                            required: true, message: 'Required'
@@ -52,14 +52,17 @@ function PalletForm(props) {
                                 <Input size={'large'}/>
                             </Form.Item>
                         </Col>
-                        <Col span={12}>
-                            <Form.Item name="custom_created_date" label="Date"
-                                       rules={[{
-                                           required: true, message: 'Required'
-                                       }]}>
-                                <DatePicker size={'large'}/>
-                            </Form.Item>
-                        </Col>
+                        {
+                            formValues.id !== 0 &&
+                            <Col span={12}>
+                                <Form.Item name="custom_created_date" label="Date"
+                                           rules={[{
+                                               required: true, message: 'Required'
+                                           }]}>
+                                    <DatePicker className={'!w-full'} size={'large'}/>
+                                </Form.Item>
+                            </Col>
+                        }
                         <Col span={12}>
                             <Form.Item name="log" label="log"
                                        rules={[{
