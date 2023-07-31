@@ -135,6 +135,18 @@ export const handleUpdatePallet = (data) => (dispatch) => {
     })
 }
 
+export const handleDeletePalletLog = (data) => () => {
+    return new Promise((resolve, reject) => {
+        api().post(`/pallet/logs/delete`, data)
+            .then((res) => {
+                // dispatch(updatePallet(res.data))
+                resolve(res)
+            }).catch((err) => {
+            reject(err)
+        })
+    })
+}
+
 /**
  * Remove the specified resource from storage.
  * @param id

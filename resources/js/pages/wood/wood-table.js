@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react'
+import React, {useState} from 'react'
 import {Button, Space, Table} from 'antd'
 import PropTypes from 'prop-types'
 import {connect} from "react-redux";
@@ -47,7 +47,11 @@ function WoodTable(props) {
                             </TlaAddNew>
                             <TlaConfirm title={'Wood(s)'} btnText={'Delete'}
                                         callBack={() => {
-                                            deleteWood(selectedRowKeys).then(() => TlaSuccess('Wood Deleted'))
+                                            deleteWood(selectedRowKeys)
+                                                .then(() => {
+                                                    window.location.reload()
+                                                    TlaSuccess('Wood Deleted')
+                                                })
                                         }}
                                         showIcon={false}/>
                         </Space> : <></>
