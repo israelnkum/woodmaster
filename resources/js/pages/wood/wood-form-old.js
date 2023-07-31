@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react'
 import PropTypes from 'prop-types'
-import {Col, Form, Input, InputNumber, Row} from 'antd'
+import {Checkbox, Col, Form, Input, InputNumber, Row} from 'antd'
 import {connect} from 'react-redux'
 import {useLocation} from "react-router-dom";
 import {handleAddWood, handleUpdateWood} from "../../actions/wood/Action";
@@ -17,6 +17,7 @@ function WoodFormOld(props) {
 
     const formValues = {
         id: 0,
+        print_barcode: true,
         parcel: 'NULL',
         ...state.data
     }
@@ -119,6 +120,11 @@ function WoodFormOld(props) {
                                    }
                                ]}>
                         <Input size={'large'}/>
+                    </Form.Item>
+                </Col>
+                <Col span={24}>
+                    <Form.Item name="print_barcode" valuePropName="checked">
+                        <Checkbox>Print Barcode</Checkbox>
                     </Form.Item>
                 </Col>
             </Row>

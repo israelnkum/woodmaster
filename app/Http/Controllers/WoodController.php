@@ -209,6 +209,18 @@ class WoodController extends Controller
 
             DB::commit();
 
+            if ($request->print_barcode == 'true') {
+                Barcode::printBarcode([
+                    'length' => $request->length,
+                    'width' => $request->width,
+                    'log' => $wood->palletLog->log_number,
+                    'subLog' => $wood->sub_log,
+                    'number' => $wood->number,
+                    'sheets' => $request->sheets,
+                    'squareMeter' => $wood->square_meter
+                ]);
+            }
+
             return new WoodResource($wood);
         } catch (Exception $exception) {
             Log::error('Update Wood ', [$exception]);

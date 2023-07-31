@@ -8,6 +8,7 @@ import WoodTable from "../wood/wood-table";
 import WoodForm from "../wood/wood-form";
 import PalletInfo from "./pallet-info";
 import PalletStats from "./pallet-stats";
+import Logs from "./logs";
 
 function PalletDetail(props) {
     const {getPallet, getPalletWood, palletWood, pallet, palletLogs, filter} = props
@@ -59,14 +60,21 @@ function PalletDetail(props) {
                                     {
                                         key: 'detail',
                                         label: 'Pallet Info',
-                                        children: <PalletInfo pallet={pallet} palletLogs={palletLogs}
-                                                              loading={loading}/>,
+                                        children: <PalletInfo
+                                            pallet={pallet}
+                                            palletLogs={palletLogs}
+                                            loading={loading}/>,
                                         forceRender: true
                                     },
                                     {
                                         key: 'pallet-info',
                                         label: 'Pallet Stats',
                                         children: <PalletStats/>
+                                    },
+                                    {
+                                        key: 'pallet-logs',
+                                        label: 'Logs',
+                                        children: <Logs/>
                                     }
                                 ]}/>
                             </Card>

@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth:sanctum']], static function () {
     Route::get('/pallet/woods', [PalletController::class, 'getPalletWood']);
     Route::get('/pallet/woods/filter', [PalletController::class, 'filterPalletWoods']);
     Route::get('/pallet/{id}/logs', [PalletController::class, 'getPalletLogs']);
+    Route::post('/pallet/logs/delete', [PalletController::class, 'deletePalletLog']);
     Route::get('/pallet-log/{id}/sub-logs', [PalletController::class, 'getPalletSubLogs']);
     Route::apiResource('/pallets', PalletController::class);
     Route::post('/wood/{id}/barcode', [WoodController::class, 'printBarcode']);

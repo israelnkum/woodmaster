@@ -92,7 +92,6 @@ class PalletController extends Controller
      */
     public function getPalletWood(Request $request): AnonymousResourceCollection
     {
-        Log::info($request);
         $pal = Pallet::findOrFail($request->query('palletId'));
 
         if ($request->has('displayAll') && $request->displayAll === 'true') {
@@ -281,10 +280,38 @@ class PalletController extends Controller
 
     public function searchPallets($query): AnonymousResourceCollection
     {
-        $employees = Pallet::query()
+        $pallets = Pallet::query()
             ->where('pallet_number', 'like', '%' . $query . '%')
             ->get();
 
-        return PalletResource::collection($employees);
+        return PalletResource::collection($pallets);
+    }
+
+
+    /**
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function deletePalletLog(Request $request): JsonResponse
+    {
+        DB::beginTransaction();
+        try {
+            $palletLog = PalletLog::query()->where('pallet_id', $request->palletId)
+                ->where('log_number', $request->logNumber)->first();
+
+            $palletLog?->woods()->forceDelete();
+            $palletLog?->forceDelete();
+
+            DB::commit();
+            return response()->json([
+                'message' => 'Log Deleted'
+            ]);
+        } catch (\Exception $exception) {
+            Log::error('Delete Pallet Log', [$exception->getMessage()]);
+
+            return response()->json([
+                'message' => 'Something went wrong'
+            ], 400);
+        }
     }
 }

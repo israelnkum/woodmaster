@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import PropTypes from 'prop-types'
 import {Button, Card, Form, Input} from "antd";
-import {FiFilter, FiPrinter} from "react-icons/fi";
+import {FiFilter} from "react-icons/fi";
 import dayjs from "dayjs";
 
 function FilterWrapper(props) {
@@ -15,10 +15,10 @@ function FilterWrapper(props) {
         values.print = false
         const dateFormat = 'YYYY-MM-DD';
 
-        if (values.date) {
+        if (values.date && values.date.length > 0) {
             values['startDate'] = dayjs(values.date[0]).format(dateFormat)
             values['endDate'] = dayjs(values.date[1]).format(dateFormat)
-        }else {
+        } else {
             values['startDate'] = null
             values['endDate'] = null
         }
